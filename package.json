@@ -4,7 +4,12 @@
   "description": "Generic OIDC Service for Login.DfE ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "node generate-keys.js; ./generate-certs.sh",
+    "dev" : "HOST=localhost PORT=4430 SECURE_KEY='foo,bar' node src/index.js"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   },
   "repository": {
     "type": "git",
@@ -15,5 +20,18 @@
   "bugs": {
     "url": "https://github.com/DFE-Digital/login.dfe.oidc/issues"
   },
-  "homepage": "https://github.com/DFE-Digital/login.dfe.oidc#readme"
+  "homepage": "https://github.com/DFE-Digital/login.dfe.oidc#readme",
+  "dependencies": {
+    "body-parser": "^1.18.0",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-urlrewrite": "^1.2.0",
+    "lodash": "^4.17.4",
+    "oidc-provider": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb-base": "^11.3.1",
+    "eslint-plugin-import": "^2.7.0"
+  }
 }
