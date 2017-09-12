@@ -1,0 +1,19 @@
+{
+  "name": "login.dfe.oidc",
+  "version": "1.0.0",
+  "description": "Generic OIDC Service for Login.DfE ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DFE-Digital/login.dfe.oidc.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DFE-Digital/login.dfe.oidc/issues"
+  },
+  "homepage": "https://github.com/DFE-Digital/login.dfe.oidc#readme"
+}
