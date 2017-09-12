@@ -58,6 +58,11 @@ typings/
 .env
 
 
+# WebStorm Stuff
+
+.idea/workspace.xml
+.idea/tasks.xml
+
 # Project specific stuff
 src/keystore.json
 ssl/**
