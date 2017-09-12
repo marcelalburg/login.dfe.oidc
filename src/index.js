@@ -10,6 +10,8 @@ const express = require('express')
 
 const app = express()
 
+const adapter = require('./adapters/MasterAdapter');
+
 const options = {
     key: fs.readFileSync('./ssl/localhost.key'),
     cert: fs.readFileSync('./ssl/localhost.cert'),
@@ -38,7 +40,7 @@ const keystore = require('./keystore.json')
 
 oidc.initialize({
     keystore,
-    clients: [{client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb']}]
+    adapter
 }).then(() => {
     app.proxy = true
     app.keys = process.env.SECURE_KEY.split(',')
