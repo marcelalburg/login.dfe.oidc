@@ -22,6 +22,7 @@ const options = {
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
+    clientCacheDuration: 60,
     features: {
         claimsParameter: true,
         discovery: true,
@@ -38,7 +39,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
 const keystore = require('./keystore.json')
 
 oidc.initialize({
-    clientCacheDuration: 60,
+
     keystore,
     adapter
 }).then(() => {

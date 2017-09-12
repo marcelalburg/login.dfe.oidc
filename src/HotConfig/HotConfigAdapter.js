@@ -14,7 +14,7 @@ class HotConfigAdapter {
   }
 
   async find(id) {
-    return Promise.resolve({client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb']});
+    return Promise.resolve({});
   }
 
 

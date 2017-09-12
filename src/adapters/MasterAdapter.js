@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use strict';
 const genericAdapter = require('./GenericAdapter');
-const hotConfigAdapter = require('./HotConfigAdapter');
+const hotConfigAdapter = require('../HotConfig/HotConfigFileAdapter');
 
 const adapterMapping = [
   { name: 'Client', adapter: new hotConfigAdapter('Client') },
