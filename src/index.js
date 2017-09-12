@@ -10,6 +10,8 @@ const express = require('express')
 
 const app = express()
 
+const adapter = require('./adapters/MasterAdapter');
+
 const options = {
     key: fs.readFileSync('./ssl/localhost.key'),
     cert: fs.readFileSync('./ssl/localhost.cert'),
@@ -20,6 +22,7 @@ const options = {
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
+    clientCacheDuration: 60,
     features: {
         claimsParameter: true,
         discovery: true,
@@ -36,9 +39,9 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
 const keystore = require('./keystore.json')
 
 oidc.initialize({
-    clientCacheDuration: 60,
+
     keystore,
-    clients: [{client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb']}]
+    adapter
 }).then(() => {
     app.proxy = true
     app.keys = process.env.SECURE_KEY.split(',')
