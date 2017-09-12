@@ -60,8 +60,8 @@ typings/
 
 # WebStorm Stuff
 
-*/.idea/workspace.xml
-*/.idea/tasks.xml
+.idea/workspace.xml
+.idea/tasks.xml
 
 # Project specific stuff
 src/keystore.json

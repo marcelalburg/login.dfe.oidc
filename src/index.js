@@ -37,6 +37,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
 const keystore = require('./keystore.json')
 
 oidc.initialize({
+    clientCacheDuration: 60,
     keystore,
     clients: [{client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb']}]
 }).then(() => {
