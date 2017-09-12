@@ -49,7 +49,6 @@ oidc.initialize({
     server.listen(port, function () {
         console.log('Express server listening on port ' + server.address().port)
     })
-    
 }).catch((e) => {
         console.log(e)
     }
