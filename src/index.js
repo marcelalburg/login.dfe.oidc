@@ -17,6 +17,7 @@ const options = {
     rejectUnauthorized: false
 }
 
+
 // TODO : Work out the URL based on the ENV...
 console.log(`https://${process.env.HOST}:${process.env.PORT}`)
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
@@ -39,18 +40,16 @@ oidc.initialize({
     keystore,
     clients: [{client_id: 'foo', client_secret: 'bar', redirect_uris: ['http://lvh.me/cb']}]
 }).then(() => {
-
     app.proxy = true
     app.keys = process.env.SECURE_KEY.split(',')
     app.use(oidc.callback)
-
-    //app.listen(process.env.PORT);
     const port = process.env.PORT
-    var server = https.createServer(options, app)
+    const server = https.createServer(options, app)
 
     server.listen(port, function () {
         console.log('Express server listening on port ' + server.address().port)
     })
+    
 }).catch((e) => {
         console.log(e)
     }
