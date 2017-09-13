@@ -4,9 +4,7 @@
   "description": "Generic OIDC Service for Login.DfE ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "node generate-keys.js; ./generate-certs.sh",
-    "dev": "HOST=localhost PORT=4430 SECURE_KEY='foo,bar' node src/index.js"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -32,6 +30,9 @@
   "devDependencies": {
     "eslint": "^4.4.1",
     "eslint-config-airbnb-base": "^11.3.1",
-    "eslint-plugin-import": "^2.7.0"
+    "eslint-plugin-import": "^2.7.0",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3",
+    "sinon": "^3.2.1"
   }
 }
