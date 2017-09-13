@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/DFE-Digital/login.dfe.oidc#readme",
   "dependencies": {
-    "body-parser": "^1.18.0",
+    "body-parser": "^1.18.1",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "express-urlrewrite": "^1.2.0",
