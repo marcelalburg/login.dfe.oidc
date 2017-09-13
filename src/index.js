@@ -13,13 +13,6 @@ const app = express();
 
 const adapter = require('./adapters/MasterAdapter');
 
-const options = {
-  key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
-  cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
-  requestCert: false,
-  rejectUnauthorized: false,
-};
-
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
@@ -49,6 +42,15 @@ oidc.initialize({
   app.use(oidc.callback);
 
   const port = process.env.PORT;
+
+  console.log('NODE_ENV: ',process.env.NODE_ENV);
+
+  const options = {
+    key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
+    cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
+    requestCert: false,
+    rejectUnauthorized: false,
+  };
 
   if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') {
     const https = require('https');
