@@ -16,7 +16,9 @@ class HotConfigFileAdapter extends HotConfigAdapter{
 
     const clients = JSON.parse(clientsJson);
 
-    return clients.find((client) => client.client_id === id);
+
+    const client = clients.find((item) => item.client_id === id);
+    return client === undefined ? null : client;
   }
 
 }
