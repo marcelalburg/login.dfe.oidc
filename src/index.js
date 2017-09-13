@@ -14,8 +14,8 @@ const app = express();
 const adapter = require('./adapters/MasterAdapter');
 
 const options = {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.cert'),
+  key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
+  cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
   requestCert: false,
   rejectUnauthorized: false,
 };
