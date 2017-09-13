@@ -1,1 +1,1 @@
-[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]
+[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["https://floating-temple-42985.herokuapp.com/usernamepassword"]}]
