@@ -1,29 +1,32 @@
 'use strict';
 
 // see previous example for the things that are not commented
-
-const assert = require('assert');
 const Provider = require('oidc-provider');
-
 const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const adapter = require('./adapters/MasterAdapter');
 
 const app = express();
 
-const adapter = require('./adapters/MasterAdapter');
-
-
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
-  clientCacheDuration: 60,
+  interactionUrl(ctx) {
+    return `/interaction/${ctx.oidc.uuid}`;
+  },
+  // TODO deployment configuration
   features: {
+    // disable the packaged interactions
+    devInteractions: false,
     claimsParameter: true,
+    clientCredentials: true,
     discovery: true,
     encryption: true,
     introspection: true,
     registration: true,
     request: true,
+    requestUri: true,
     revocation: true,
     sessionManagement: true,
   },
@@ -37,13 +40,15 @@ oidc.initialize({
   keystore,
   adapter,
 }).then(() => {
-  app.proxy = true;
-  app.keys = process.env.SECURE_KEY.split(',');
-  app.use(oidc.callback);
+  oidc.app.proxy = true;
+  oidc.app.keys = process.env.SECURE_KEY.split(',');
+}).then(() => {
+  app.set('trust proxy', true);
+  app.set('view engine', 'ejs');
+  app.set('views', path.resolve(__dirname, 'views'));
 
   const port = process.env.PORT;
-
-  console.log('NODE_ENV: ',process.env.NODE_ENV);
+  const parse = bodyParser.urlencoded({ extended: false });
 
   const options = {
     key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
@@ -63,42 +68,43 @@ oidc.initialize({
     app.listen(port);
   }
 
-  app.get('/interaction/:grant', async (ctx, next) => {
-    oidc.interactionDetails(next).then((details) => {
+  app.get('/interaction/:grant', async (req, res) => {
+    oidc.interactionDetails(req).then((details) => {
       console.log('see what else is available to you for interaction views', details);
 
-      // TODO To come from config
-      const url = `https://floating-temple-42985.herokuapp.com/usernamepassword?uuid=${details.uuid}`;
-      next.redirect(url);
+      const url = `${process.env.INTERACTION_BASE_URL}/usernamepassword?uuid=${details.uuid}`;
+      res.redirect(url);
     });
   });
 
-  const body = bodyParser();
 
-  app.post('/interaction/:grant/confirm', body, async (ctx, next) => {
-    const result = { consent: {} };
-    await oidc.interactionFinished(ctx.req, ctx.res, result);
-    await next();
+  app.post('/interaction/:grant/confirm', parse, (req, res) => {
+    oidc.interactionFinished(req, res, {
+      consent: {},
+    });
   });
 
-  app.post('/interaction/:grant/login', body, async (ctx, next) => {
-    const account = await Account.findByLogin(ctx.request.body.login);
+  app.get('/usernamepassword', (req,res) => {
+    res.render('usernamepassword', { uuid: req.query.uuid });
+  });
 
-    const result = {
+  app.post('/interaction/:grant/complete', parse, (req, res) => {
+    oidc.interactionFinished(req, res, {
       login: {
-        account: account.accountId,
-        acr: 'urn:mace:incommon:iap:bronze',
-        amr: ['pwd'],
-        remember: !!ctx.request.body.remember,
+        account: req.body.uid, // becomes token
+        acr: '1',
+        // remember: !!req.body.remember,
         ts: Math.floor(Date.now() / 1000),
       },
-      consent: {},
-    };
-
-    await oidc.interactionFinished(ctx.req, ctx.res, result);
-    await next();
+      consent: {
+        // TODO: remove offline_access from scopes if remember is not checked
+      },
+    }).then(((details) => {
+      console.log('then', details);
+    }));
   });
 
+  app.use(oidc.callback);
 }).catch((e) => {
   console.log(e);
 },
