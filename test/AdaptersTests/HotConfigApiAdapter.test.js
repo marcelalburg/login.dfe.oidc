@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const request = require('request');
+const request = require('request-promise');
 const HotConfigApiAdapter = require('../../src/HotConfig/HotConfigApiAdapter');
 
 const clients = '[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]';
@@ -49,6 +49,7 @@ describe('When using the HotConfigApiAdapter', () => {
       return adapter.find('foo1').then( function(actual) {
         expect(actual).to.equal(null);
       });
+
     });
   });
 })
