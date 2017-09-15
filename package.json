@@ -4,10 +4,9 @@
   "description": "Generic OIDC Service for Login.DfE ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha --reporter spec",
     "setup": "node generate-keys.js; ./generate-certs.sh",
-    "dev": "HOST=localhost PORT=4430 SECURE_KEY='foo,bar' INTERACTION_BASE_URL='https://localhost:4430' node src/index.js",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "dev": "HOST=localhost PORT=4430 SECURE_KEY='foo,bar' INTERACTION_BASE_URL='https://localhost:4430' node src/index.js"
   },
   "engines": {
     "node": ">=8.0.0"

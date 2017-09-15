@@ -1,17 +1,12 @@
 'use strict';
 
 // see previous example for the things that are not commented
-const assert = require('assert')
 const Provider = require('oidc-provider');
 const fs = require('fs');
-const fs = require('fs')
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express()
 const adapter = require('./adapters/MasterAdapter');
-
-    rejectUnauthorized: false
-}
 const app = express();
 
 // TODO : Work out the URL based on the ENV...
@@ -23,7 +18,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
   // TODO deployment configuration
   features: {
     // disable the packaged interactions
-    devInteractions: false,
+    devInteractions: true,
     claimsParameter: true,
     clientCredentials: true,
     discovery: true,
@@ -33,6 +28,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
     request: true,
     requestUri: true,
     revocation: true,
+    rejectUnauthorized: false,
     sessionManagement: true,
   },
 });
@@ -44,10 +40,10 @@ oidc.initialize({
 
   keystore,
   adapter,
+}).then(() =>  {
+  app.proxy = true
+  app.keys = process.env.SECURE_KEY.split(',');
 }).then(() => {
-    app.proxy = true
-    app.keys = process.env.SECURE_KEY.split(',')
-    app.use(oidc.callback)
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
   app.set('views', path.resolve(__dirname, 'views'));
