@@ -18,7 +18,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
   // TODO deployment configuration
   features: {
     // disable the packaged interactions
-    devInteractions: true,
+    devInteractions: false,
     claimsParameter: true,
     clientCredentials: true,
     discovery: true,
