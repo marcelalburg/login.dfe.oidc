@@ -7,11 +7,11 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const adapter = require('./adapters/MasterAdapter');
-
 const app = express();
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
+  clientCacheDuration: 60,
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
   },
@@ -28,6 +28,7 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
     request: true,
     requestUri: true,
     revocation: true,
+    rejectUnauthorized: false,
     sessionManagement: true,
   },
 });
@@ -39,9 +40,9 @@ oidc.initialize({
 
   keystore,
   adapter,
-}).then(() => {
-  oidc.app.proxy = true;
-  oidc.app.keys = process.env.SECURE_KEY.split(',');
+}).then(() =>  {
+  app.proxy = true
+  app.keys = process.env.SECURE_KEY.split(',');
 }).then(() => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
@@ -67,7 +68,6 @@ oidc.initialize({
   } else {
     app.listen(port);
   }
-
   app.get('/interaction/:grant', async (req, res) => {
     oidc.interactionDetails(req).then((details) => {
       console.log('see what else is available to you for interaction views', details);
