@@ -1,0 +1,1 @@
+module.exports = (process.env.CLIENTS_URL !== undefined) ? require('../HotConfig/HotConfigApiAdapter') : require('../HotConfig/HotConfigFileAdapter');
