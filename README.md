@@ -16,7 +16,7 @@ npm run setup
 
 Run
 ```
-num run dev 
+npm run dev 
 ```
 
 Visit
