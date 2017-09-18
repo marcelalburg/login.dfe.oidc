@@ -5,13 +5,17 @@ const HotConfigApiAdapter = require('../../src/HotConfig/HotConfigApiAdapter');
 
 const clients = '[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]';
 
+const epectedClientsUrl = 'http://clients.local';
+const expectedClientsToken = 'super-secret-super-token';
+
 describe('When using the HotConfigApiAdapter', () => {
   describe('and finding clients by Id', function () {
 
     let adapter;
     let sandbox;
 
-    process.env.CLIENTS_URL = 'clients';
+    process.env.CLIENTS_URL = epectedClientsUrl;
+    process.env.CLIENTS_TOKEN = expectedClientsToken;
 
     beforeEach(function(){
       adapter = new HotConfigApiAdapter('Client');
@@ -23,6 +27,14 @@ describe('When using the HotConfigApiAdapter', () => {
     it('the clients are read from the api', function () {
       const mock = sinon.mock(request);
       mock.expects('get').once().returns('[{}]');
+
+      adapter.find('client1');
+
+      mock.verify();
+    });
+    it('the auth header is added to the request', function () {
+      const mock = sinon.mock(request);
+      mock.expects('get').once().withArgs(epectedClientsUrl,{ auth: { bearer: expectedClientsToken } }).returns('[{}]');
 
       adapter.find('client1');
 
