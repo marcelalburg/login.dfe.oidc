@@ -93,7 +93,8 @@ oidc.initialize({
 
   app.post('/interaction/:grant/complete', parse, (req, res) => {
 
-    const verified = RequestVerification.verifyRequest(req);
+    const requestVerification = new RequestVerification();
+    const verified = requestVerification.verifyRequest(req);
 
     if (verified) {
       oidc.interactionFinished(req, res, {

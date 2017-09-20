@@ -6,7 +6,7 @@ module.exports = {
       (process.env.REQUEST_VERIFICATION_ENABLED === undefined
         || process.env.REQUEST_VERIFICATION_ENABLED === null)
         ? false
-        : process.env.REQUEST_VERIFICATION_ENABLED,
+        : process.env.REQUEST_VERIFICATION_ENABLED.toLowerCase() === 'true',
   },
   hostingEnvironment: {
     env: process.env.NODE_ENV ? process.env.NODE_ENV : 'dev',
