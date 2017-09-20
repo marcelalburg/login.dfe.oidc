@@ -72,7 +72,7 @@ oidc.initialize({
     oidc.interactionDetails(req).then((details) => {
       console.log('see what else is available to you for interaction views', details);
 
-      const url = `${process.env.INTERACTION_BASE_URL}/usernamepassword?uuid=${details.uuid}`;
+      const url = `${process.env.INTERACTION_BASE_URL}/${details.uuid}/usernamepassword`;
       res.redirect(url);
     });
   });
@@ -84,8 +84,8 @@ oidc.initialize({
     });
   });
 
-  app.get('/usernamepassword', (req,res) => {
-    res.render('usernamepassword', { uuid: req.query.uuid });
+  app.get('/:uuid/usernamepassword', (req,res) => {
+    res.render('usernamepassword', { uuid: req.params.uuid });
   });
 
   app.post('/interaction/:grant/complete', parse, (req, res) => {
