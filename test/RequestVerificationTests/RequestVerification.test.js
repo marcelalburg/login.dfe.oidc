@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const fs = require('fs');
 const config = require('../../src/Config');
 const RequestVerification = require('../../src/RequestVerification/RequestVerification');
-const digitalSignatureService = require('../../src/Utils/DigitalSignatureService');
+const DigitalSignatureService = require('../../src/Utils/DigitalSignatureService');
 
 const expectedUid = 'myuid';
 const expectedUuid = 'myUuid';
@@ -20,8 +20,10 @@ params: {
 
 describe('When verifying the request', () => {
   let sandbox;
+  let requestVerification;
 
   beforeEach(() => {
+    requestVerification = new RequestVerification();
     sandbox = sinon.sandbox.create();
     sandbox.stub(config.requestVerification,'isEnabled').get(() => {return true;});
   });
@@ -29,32 +31,21 @@ describe('When verifying the request', () => {
     sandbox.restore();
   });
   it('the interactions certification is loaded', () => {
-    sandbox.stub(digitalSignatureService, 'verifySignature').returns(true);
+    sandbox.stub(DigitalSignatureService.prototype,'verifyRequest').returns(true);
     const mock = sinon.mock(fs);
-
     mock.expects('readFileSync').once().withArgs('./ssl/interactions.cert', 'utf8').returns('abcdefg');
 
-    RequestVerification.verifyRequest(req);
+    requestVerification.verifyRequest(req);
 
     mock.verify();
   });
-  it('the uuid and uid are used for the verification', () => {
-    const mock = sinon.mock(digitalSignatureService);
-
-    mock.expects('write').once().withArgs(`{"uuid":"${expectedUuid}","uid":"${expectedUid}"}`);
-
-    RequestVerification.verifyRequest(req);
-
-    mock.verify();
-  });
-  it('the verify function is called passing in the signature and public key', () => {
+  it('the verify function is called passing in the signature and public key and contents', () => {
     const expectedCertContent = 'abcdefg';
     const mock = sinon.mock(fs);
     mock.expects('readFileSync').once().withArgs('./ssl/interactions.cert', 'utf8').returns(expectedCertContent);
-    sandbox.stub(digitalSignatureService, 'write');
-    sandbox.stub(digitalSignatureService, 'verifySignature').withArgs(expectedCertContent,expectedSig).returns(true);
+    sandbox.stub(DigitalSignatureService.prototype,'verifyRequest').withArgs(`{"uuid":"${expectedUuid}","uid":"${expectedUid}"}`,expectedCertContent,expectedSig).returns(true);
 
-    const actual = RequestVerification.verifyRequest(req);
+    const actual = requestVerification.verifyRequest(req);
 
     expect(actual).to.equal(true);
     mock.verify();
@@ -64,7 +55,7 @@ describe('When verifying the request', () => {
     const mock = sinon.mock(fs);
 
     mock.expects('readFileSync').never();
-    const actual = RequestVerification.verifyRequest(req);
+    const actual = requestVerification.verifyRequest(req);
 
     expect(actual).to.equal(true);
     mock.verify();

@@ -2,15 +2,13 @@
 
 const crypto = require('crypto');
 
-const cryptoVerify = crypto.createVerify('RSA-SHA256');
-
 class DigitalSignatureService {
-  static write(contents) {
+
+  verifyRequest(contents, publicKey, sig) {
+    const cryptoVerify = crypto.createVerify('RSA-SHA256');
     cryptoVerify.write(contents);
     cryptoVerify.end();
-  }
-  static verifySignature(publicKey, sig) {
-    cryptoVerify.verify(publicKey, sig, 'base64');
+    return cryptoVerify.verify(publicKey, sig, 'base64');
   }
 }
 
