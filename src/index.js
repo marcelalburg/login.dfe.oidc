@@ -7,7 +7,10 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const adapter = require('./adapters/MasterAdapter');
+const RequestVerification = require('./RequestVerification/RequestVerification');
+
 const app = express();
+
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
@@ -89,19 +92,26 @@ oidc.initialize({
   });
 
   app.post('/interaction/:grant/complete', parse, (req, res) => {
-    oidc.interactionFinished(req, res, {
-      login: {
-        account: req.body.uid, // becomes token
-        acr: '1',
-        // remember: !!req.body.remember,
-        ts: Math.floor(Date.now() / 1000),
-      },
-      consent: {
-        // TODO: remove offline_access from scopes if remember is not checked
-      },
-    }).then(((details) => {
-      console.log('then', details);
-    }));
+
+    const verified = RequestVerification.verifyRequest(req);
+
+    if (verified) {
+      oidc.interactionFinished(req, res, {
+        login: {
+          account: req.body.uid, // becomes token
+          acr: '1',
+          // remember: !!req.body.remember,
+          ts: Math.floor(Date.now() / 1000),
+        },
+        consent: {
+          // TODO: remove offline_access from scopes if remember is not checked
+        },
+      }).then(((details) => {
+        console.log('then', details);
+      }));
+    } else {
+      oidc.interactionFinished(req, res, {});
+    }
   });
 
   app.use(oidc.callback);
