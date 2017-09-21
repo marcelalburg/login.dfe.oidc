@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DFE-Digital/login.dfe.oidc.svg?branch=master)](https://travis-ci.org/DFE-Digital/login.dfe.oidc)
+
 # login.dfe.oidc
 
 Generic OpenID Connect server for DfE, part of the **login.dfe** project.
