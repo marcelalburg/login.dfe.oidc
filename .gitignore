@@ -66,3 +66,4 @@ typings/
 # Project specific stuff
 src/keystore.json
 ssl/**
+.idea
