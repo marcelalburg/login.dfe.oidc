@@ -3,10 +3,11 @@
 const HotConfigAdapter = require('./HotConfigAdapter');
 const request = require('request-promise');
 const config = require('../Config');
+const jwtStrategy = require('../helpers/jwt_strategies')
 
 class HotConfigApiAdapter extends HotConfigAdapter {
   async find(id) {
-    const bearerToken = await config.hotConfig.getBearerToken();
+    const bearerToken = await jwtStrategy(config.hotConfig).getBearerToken();
     try {
       const response = await request.get(config.hotConfig.url, {
         auth: { bearer: bearerToken },
