@@ -2,29 +2,32 @@
 
 const HotConfigAdapter = require('./HotConfigAdapter');
 const request = require('request-promise');
-
+const config = require('../Config');
 
 class HotConfigApiAdapter extends HotConfigAdapter {
   async find(id) {
-    return new Promise((resolve, reject) => {
-      request.get(process.env.CLIENTS_URL,
-        { auth: { bearer: process.env.CLIENTS_TOKEN } }, (error, response, body) => {
-          let returnValue = null;
-          if (!error && response.statusCode === 200) {
-            if (!body) {
-              resolve(null);
-            }
-            const clients = JSON.parse(body);
-            const client = clients.find(item => item.client_id === id);
+    const bearerToken = await config.hotConfig.getBearerToken();
+    try {
+      const response = await request.get(config.hotConfig.url, {
+        auth: { bearer: bearerToken },
+        strictSSL: false,
+        resolveWithFullResponse: true,
+      });
+      let returnValue = null;
+      if (response.statusCode === 200) {
+        if (!response.body) {
+          return null;
+        }
+        const clients = JSON.parse(response.body);
+        const client = clients.find(item => item.client_id === id);
 
-            returnValue = client === undefined ? null : client;
-            resolve(returnValue);
-          } else {
-            returnValue = null;
-            reject(response);
-          }
-        }); // .auth(null, null, true, process.env.CLIENTS_TOKEN)
-    });
+        returnValue = client === undefined ? null : client;
+        return returnValue;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 }
 
