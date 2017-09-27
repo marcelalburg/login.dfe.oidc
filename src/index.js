@@ -7,10 +7,23 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const adapter = require('./adapters/MasterAdapter');
+const useOidc = require('./oidc');
 const config = require('./Config');
+const morgan = require('morgan');
+const winston = require('winston');
 
 const app = express();
-const useOidc = require('./oidc');
+const logger = new (winston.Logger)({
+  colors: config.loggerSettings.colors,
+  transports: [
+    new (winston.transports.Console)({ level: 'info', colorize: true }),
+  ],
+});
+
+
+app.set('logger', logger);
+app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
+app.use(morgan('dev'));
 
 
 // TODO : Work out the URL based on the ENV...
@@ -66,12 +79,12 @@ oidc.initialize({
     const server = https.createServer(options, app);
 
     server.listen(port, () => {
-      console.log(`Dev server listening on https://${process.env.HOST}:${process.env.PORT}`);
+      logger.info(`Dev server listening on https://${process.env.HOST}:${process.env.PORT}`);
     });
   } else {
     app.listen(port);
   }
 })
   .catch((e) => {
-    console.log(e);
+    logger.info(e);
   });

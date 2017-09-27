@@ -8,7 +8,7 @@ const parse = bodyParser.urlencoded({ extended: false });
 const init = (app, oidc) => {
   app.get('/interaction/:grant', async (req, res) => {
     oidc.interactionDetails(req).then((details) => {
-      console.log('see what else is available to you for interaction views', details);
+      app.logger.info('see what else is available to you for interaction views', details);
 
       const url = `${process.env.INTERACTION_BASE_URL}/${details.uuid}/usernamepassword`;
       res.redirect(url);
@@ -42,7 +42,7 @@ const init = (app, oidc) => {
           // TODO: remove offline_access from scopes if remember is not checked
         },
       }).then(((details) => {
-        console.log('then', details);
+        app.logger.info('then', details);
       }));
     } else {
       oidc.interactionFinished(req, res, {});
