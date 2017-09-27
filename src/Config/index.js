@@ -1,6 +1,18 @@
 'use strict';
 
 module.exports = {
+  loggerSettings: {
+    levels: {
+      info: 0,
+      ok: 1,
+      error: 2,
+    },
+    colors: {
+      info: 'yellow',
+      ok: 'green',
+      error: 'red',
+    },
+  },
   requestVerification: {
     isEnabled:
       (process.env.REQUEST_VERIFICATION_ENABLED === undefined
