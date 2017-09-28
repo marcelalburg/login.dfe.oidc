@@ -24,7 +24,7 @@ describe('When using the HotConfigApiAdapter', () => {
     beforeEach(() => {
       HotConfigApiAdapter = proxyquire('../../src/HotConfig/HotConfigApiAdapter', {
         '../Config': configStub,
-        '../helpers/jwt_strategies': function (config) {
+        'login.dfe.jwt-strategies': function (config) {
           return {
             async getBearerToken() {
               return Promise.resolve(expectedClientsToken);

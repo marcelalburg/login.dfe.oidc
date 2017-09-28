@@ -28,6 +28,7 @@
     "express": "^4.15.4",
     "express-urlrewrite": "^1.2.0",
     "lodash": "^4.17.4",
+    "login.dfe.jwt-strategies": "github:DFE-Digital/login.dfe.jwt-strategies#master",
     "morgan": "^1.9.0",
     "oidc-provider": "^2.3.0",
     "request": "^2.81.0",

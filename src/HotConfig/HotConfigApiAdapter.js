@@ -3,7 +3,7 @@
 const HotConfigAdapter = require('./HotConfigAdapter');
 const request = require('request-promise');
 const config = require('../Config');
-const jwtStrategy = require('../helpers/jwt_strategies')
+const jwtStrategy = require('login.dfe.jwt-strategies');
 
 class HotConfigApiAdapter extends HotConfigAdapter {
   async find(id) {
