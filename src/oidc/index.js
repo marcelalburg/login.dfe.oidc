@@ -10,7 +10,7 @@ const init = (app, oidc) => {
     oidc.interactionDetails(req).then((details) => {
       app.logger.info('see what else is available to you for interaction views', details);
 
-      const url = `${process.env.INTERACTION_BASE_URL}/${details.uuid}/usernamepassword`;
+      const url = `${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword`;
       res.redirect(url);
     });
   });

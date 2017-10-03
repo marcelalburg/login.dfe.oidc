@@ -51,7 +51,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
 });
 
 // TODO : Work out a better way of managing Keys when not in Dev...
-const keystore = require('./keystore.json');
+const keystore = config.oidc.keyStore;
 
 oidc.initialize({
 
@@ -59,7 +59,7 @@ oidc.initialize({
   adapter,
 }).then(() => {
   app.proxy = true;
-  app.keys = config.secureKey.split(',');
+  app.keys = config.oidc.secureKey.split(',');
 }).then(() => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
