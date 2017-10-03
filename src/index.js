@@ -27,7 +27,7 @@ app.use(morgan('dev'));
 
 
 // TODO : Work out the URL based on the ENV...
-const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
+const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -46,12 +46,12 @@ const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
     requestUri: true,
     revocation: true,
     rejectUnauthorized: false,
-    sessionManagement: true
-  }
+    sessionManagement: true,
+  },
 });
 
 // TODO : Work out a better way of managing Keys when not in Dev...
-const keystore = require('./keystore.json');
+const keystore = config.oidc.keyStore;
 
 oidc.initialize({
 
@@ -59,7 +59,7 @@ oidc.initialize({
   adapter,
 }).then(() => {
   app.proxy = true;
-  app.keys = process.env.SECURE_KEY.split(',');
+  app.keys = config.oidc.secureKey.split(',');
 }).then(() => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
@@ -70,16 +70,16 @@ oidc.initialize({
   const port = config.hostingEnvironment.port;
   if (isDev) {
     const options = {
-      key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
-      cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
+      key: config.hostingEnvironment.sslKey,
+      cert: config.hostingEnvironment.sslCert,
       requestCert: false,
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     };
 
     const server = https.createServer(options, app);
 
     server.listen(port, () => {
-      logger.info(`Dev server listening on https://${process.env.HOST}:${process.env.PORT}`);
+      logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
     });
   } else {
     app.listen(port);
