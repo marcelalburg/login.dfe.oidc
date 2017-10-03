@@ -1,0 +1,82 @@
+{
+  "loggerSettings": {
+    "levels": {
+      "info": 0,
+      "ok": 1,
+      "error": 2
+    },
+    "colors": {
+      "info": "yellow",
+      "ok": "green",
+      "error": "red"
+    }
+  },
+
+  "requestVerification": {
+    "isEnabled": false,
+    "cert": "-----BEGIN CERTIFICATE-----\nMIIDIDCCAgigAwIBAgIJAMLTc+Ss7Y4XMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNV\nBAMTCWxvY2FsaG9zdDAeFw0xNzA5MjUxNDQyNTRaFw0yNzA5MjMxNDQyNTRaMBQx\nEjAQBgNVBAMTCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\nggEBAJ7cxOTYbY+vYG61JTZRFac+cbPNX+VYQTPWVRpJkvZMElkJe++kYsCiu/WP\nFBpIziN8K1HDQBudBn3VAuhR+xCZLmr60J0z8XwSKzq3F3iiBGeB/qLahg+A/gw4\nnfok/lwVorI29olNsnBQ6pDuN2+Zlj4bHQpbq7xkdmB2cnvaJUSwNqTRXLOM4CPs\nDoz08KgYkZ5FH7qIfZxYdWRvIans1WIvMPXlbSLe7Iosa5CQ9iJCL3ieO9hKWsCf\nICNFdRSZde5YJ6h+hwsfW8euE6GN+1vmkMdCFUF/2OQwM4zF1snhH7hOXl1DYtuF\n8dBAio8MveGoH8zY1tc98j/Id88CAwEAAaN1MHMwHQYDVR0OBBYEFNDsGSKqlls3\nxs3vfS0h0pwQ0ff1MEQGA1UdIwQ9MDuAFNDsGSKqlls3xs3vfS0h0pwQ0ff1oRik\nFjAUMRIwEAYDVQQDEwlsb2NhbGhvc3SCCQDC03PkrO2OFzAMBgNVHRMEBTADAQH/\nMA0GCSqGSIb3DQEBBQUAA4IBAQApOshQLBHTO05TktfVbNstBc9bYkXSjRPih2hx\nch7paC0IltxrvjAHDtEp2XfaVm9QHaeoR5puB3gTQiiG2C41eme+BY/WCsq/VPRs\neknAMHRFm0Et1fTj8n7fNvo7Nw7wzt3FV7a7QHA9Yomj09xOzsM29RgJR8McZtEg\nbvB4AedS6vt0tVzmXyEfI+4vf4cAZlyOKxMJDxhYSRH8YVlYyObam7AjLbNMRzTO\nrJKWMd9kLznhUOjk+JFYC4nLIacryi6ME0xmRJlQ1MOfsNs7AyZyJ94Xc4/naxAp\n2r968qnIz/hjA6Zrm657KA8sTwRoD2F73vD2cselK0C6RFaG\n-----END CERTIFICATE-----"
+  },
+  "hotConfig": {
+    "url": "https://localhost:4432/oidcclients",
+    "auth": {
+      "type": "aad",
+      "tenant": "dfensadev.omicrosoft.com",
+      "authorityHostUrl": "https://login.microsoftonline.com/27cc275f-b524-460e-b51c-c5532d1cc54f",
+      "clientId": "dca96992-26a8-4137-a763-baab75cc47c3",
+      "clientSecret": "SxcDOQ7UNTaCeP0oZyu1DsGnKxOxQaaD9rka75ZrxDY=",
+      "resource": "f5f9ce9f-aef8-4993-a3d3-7c90142addb7"
+    }
+  },
+  "hostingEnvironment": {
+    "env": "dev",
+    "host": "localhost",
+    "port": "4430",
+    "protocol": "https",
+    "sslCert": "-----BEGIN CERTIFICATE-----\nMIIDIDCCAgigAwIBAgIJAOeftEHFgwN2MA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNV\nBAMTCWxvY2FsaG9zdDAeFw0xNzA5MjExNDM4NTBaFw0yNzA5MTkxNDM4NTBaMBQx\nEjAQBgNVBAMTCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\nggEBAMSeAYrm9GB4nVoNNJgcb2bpQ04prDK21bgTPq1Wj2cUQBBkKlZvXozlubH0\nNcPCrq8P88WhjHhvZLUTmit93QCwIaXhynqNGw37baPeFvrkO1GlUpBzA7P9ClW+\n6j5RY/ZhA59ll5cs3RqwNN7yWmDqAgWv68VMboSx01R03zDOdtUqle9un8l0dqnI\nMv7NPk+sM7Stsad/jSxmq+aD83Go118yr4ggGIjqybc63cN5tJlHBFghRAs4v352\n0QsDy3vQFDtPMekNScC+9wn6VLc2b+FtzqpW1b+p/tzrvhwM+uC0sXrCw/PkhwAf\nsf8LyaMZA+XFmo8rUsPbfPMiVyUCAwEAAaN1MHMwHQYDVR0OBBYEFK3BUPdGVrBJ\nQr5gxf8Dx205/EhMMEQGA1UdIwQ9MDuAFK3BUPdGVrBJQr5gxf8Dx205/EhMoRik\nFjAUMRIwEAYDVQQDEwlsb2NhbGhvc3SCCQDnn7RBxYMDdjAMBgNVHRMEBTADAQH/\nMA0GCSqGSIb3DQEBBQUAA4IBAQCrP44JcC9V3LxezmHLSSrWZ7AYKAK+uNj3YBTV\nVt/lXijD+HZU4nJAwWzD4DY++b1KlbpSlfiKz4tGhsWtHD03vueTX9YUHSYQVvHz\npHkGIBNdZQHpLHy9KR5yTS8md3+JWVAuB8P+XJdnfSjnRStRE9/TnTXXZxM+sWSn\ndueX9ls3CRkbsy2IWvp7HTLVCj8oyBE3yxJ3p8EKVLzEvV3zLUVK7z0VC6531u3/\nRXE3Hxi88PRJHTmSQvpLgXiSKEg/a3akPdfHHTidZ8LLOc7azCbMaxvLbE2L7qVb\nWD7B6nB//LjMbAiun/X5dNetk9kuD+GXMsjb3XYkKOrso1ER\n-----END CERTIFICATE-----",
+    "sslKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEAxJ4Biub0YHidWg00mBxvZulDTimsMrbVuBM+rVaPZxRAEGQq\nVm9ejOW5sfQ1w8Kurw/zxaGMeG9ktROaK33dALAhpeHKeo0bDftto94W+uQ7UaVS\nkHMDs/0KVb7qPlFj9mEDn2WXlyzdGrA03vJaYOoCBa/rxUxuhLHTVHTfMM521SqV\n726fyXR2qcgy/s0+T6wztK2xp3+NLGar5oPzcajXXzKviCAYiOrJtzrdw3m0mUcE\nWCFECzi/fnbRCwPLe9AUO08x6Q1JwL73CfpUtzZv4W3OqlbVv6n+3Ou+HAz64LSx\nesLD8+SHAB+x/wvJoxkD5cWajytSw9t88yJXJQIDAQABAoIBAAq7OQhUzLfLPYNh\nvyIiQy5RwvusKJroAcg3PK+HTvJoV4rNfMYU9AsqqrT8yEZ0BMbHTx3VUG5uXgfI\nFx0SlJJqCpwcM8n2k6hytaxA/e4ZsOcm59e8f1I+mGbPscdO9+7FosX7bIeyyiqf\nvXMBtU8e1pdq36p4HnwdnJQ6gMgQFErzgvSepwZLOEWt/B0blHqHM5imuU/3VpTz\nldzAOi7GII8SDls7Ff2GsnIlQcWIvGnebfHO4+9pjWnEP5ZvqjGlFRLZC5D0UHSP\n9zA6cPYpZeyGMDjM2pPsX+HKLWnqQOmDnJuNEtopmme0FTZ3QK2jD+obJemBih9i\nWTPqC8ECgYEA5cL5SSTMNzMziojD4/SDXKmk26qXMIhIyNXjtIXw/NectQKb6kMD\njNoUL5bWDA0B5kZtkFmcqsUsuTdkvlJUNK3Od9PZeqRI19r5B6HIRoTMBPMJQxua\nJVA+RIW8cIDkQValZ1xEN2kPG7viBnmQY6GN3qu1qfgxlSBzF5u7hTUCgYEA2xIQ\nPfet0DjEkVDgrrhvsvpuQBMVJa4Eju1dnvdcuB9baHwI9o9eKHIHDksR4J0rBFB/\nuEDfpuvoUwwxrlVnC5UEoxCjj8NPCyJciGgB4FmcAikkcCXP/FBKv7JJe4veBQ9/\nSQiwVOqz4mfrKF5xp6RhT15XywqGr3kmFOE5eDECgYA24HO0AaL5CDSmQPYwqwT5\nC9fBU6RaxiJEPbnuMxOVAFaAcUgWEr11Vdz+ZNNo+25ZtraShKTDsOZ2soFQZ8+O\n6Xhn7GSEQ1rWm4lhRkXUegFUqUusCJqvkNPef+a7JD3gUTaeUk5EwcYHBL/+deiD\ns2F0LqTsHMiS6rYyjFKkhQKBgCLq+CfIaK39vmcjKwzuXO98N0KDSCWfXR6i+v8x\nklfOt7UpwAv8whdURYejs4/HvWmMoy7tODjU9Uz3bpvJBQm1kO2k400w5lJyAanE\nWjg2UEWP5Tzy6fnfmmp/snK80oCf/bvYZLLETjPSOItQsnD0JIaQFRJJ9TnW55kA\nZTahAoGBAJ0wSYnqz8Rwq+V5QjnPhmQAx3DMt13Wzs0Rt02p+O4ywoelqIxjWPJm\n74cSmUQxltrYaGsYX1uVmEOj4V4Ok3S2KhYMm1D2g2sGJPf5ut6niQBWDiTf4QHb\nHETtOTwMIQ5pWrMPKLwsKH0S3d2lpCistPQO8RoKqkRzMIcWt/P4\n-----END RSA PRIVATE KEY-----"
+  },
+  "oidc": {
+    "secureKey": "foo,bar",
+    "interactionBaseUrl" :"https://localhost:4430",
+    "keyStore": {
+      "keys": [
+        {
+          "kty": "EC",
+          "kid": "wlhVRyuKzIbf6SxU2CRoS_BRR9lhmFIiIr18sirrgg8",
+          "crv": "P-256",
+          "x": "xRLJAnWlDdJkO6aEyW03SoYgW5WCFtvv3uFhjdIsH_4",
+          "y": "KaWKgfG1iq8-A5RiLHEoboXDzOFKd9bhDCYRN8SSScY",
+          "d": "WhSV_qTRO7ydHcJTQbUkHlNZOfLAIMBR__hRurFsKyM"
+        },
+        {
+          "kty": "EC",
+          "kid": "L8NOV3xbevQvHvO2OZQVkDdrX70ZDUVcWd4RzNAQyDg",
+          "crv": "P-384",
+          "x": "3criYeXki0MlyJBGKSHby5ONfnMnq6Sth1A_nSsYbw5MZt01QWImaq8w9MvCI3NX",
+          "y": "GKnbmT9UCbr48a934JadSIReo79Iv5e_Rg1dERT2gsMWl98CvNcnzoJVigWD9LUP",
+          "d": "py665aeKcQI42WrgHY6NcK7kvBY1yPOpWiPqioFcoTEuE4cOzW5uJ1Kj1HsZGiGV"
+        },
+        {
+          "kty": "EC",
+          "kid": "gc_mrK35b8Rr8wSUX7LgCpVvex83yO283ufqABxhpps",
+          "crv": "P-521",
+          "x": "AVWHLp3chysrfK2mU5jtGgLDyxL21e8Vfn5fT-hA4-v2WCWMt0a4V0h6pHYgXGGBNKCqxbFi1YoWjIMvTqhxCdDR",
+          "y": "AEtUG7ND5QPiFyVITO4xNNZhEbT-D7G_X08nc2i6eSteSqXfU0XhBgtoGPqY000i4oZ6jUiURaiV0DC12g0ZvMOI",
+          "d": "AKd72PCbeS-FrWXB28yk76y55yx0xgkvqVI6fGZg860RKRPg5pzkG689dHvVeVTHiozslsmqV2dNZYWSh6CKZT-_"
+        },
+        {
+          "kty": "RSA",
+          "kid": "KvTgejl8SNZ-zVyrfrDdWPY3zIHrdZZXTnVSSjY8-kM",
+          "e": "AQAB",
+          "n": "pOL-J_pdyddsEmtt4WZ1vYGXHTduPgppvDa9m-q1o_HJDEmo4IIwZHdI64Kukg8Zlbz9WpTznp-2TAWwqwEFQNT_L4fZIAbbSLqeuZtnZaIEUYM5xa0U1AorRI3f2kyJKQaN4N18vi8PqeC_3Wn2rBReJLK46TUETtCY-P1FfABD8rL8uDFseXTWVmzyLcilNugpsXTN_jF1x0faRoAUvT8piMY4exN3XJBdnJQmafHnu-CGr4YX1YvDXDrjlDyLLC4g9MBDfyPpB5TGuWqNv_CxzsqKLl1_37JIIS2AU19WruYx-2kfS-JTVGmHTsRqjUSUTt_eGz1NTtrdNpSPXQ",
+          "d": "CmvGQGSUdONGk0ty4GIHYvjDwjb0orspv5l-FlKZNElduYcWQ0o3IMJhO3FA8z49EbemE4mCdC4H6XoallQ0LsrHbguZ72o_hbM1wOlPeZ7pwvUWO6YawOP7pBOLaFKaAJvHb8TP031J8iSgO7AsxOdso8kf4q1VHl4UrPfk4ldPzjkGNAeRmqgMdiPrEaxtlW8JN7pYGC04HNfl2dLKAcCTK6n8vEW-w0HT6Ui3eq7Fepgr-_MAxv6o1jJe4zq9dqYft7R5n6obNb63vggg5sLHd7fdXHmJm85LrqLQj7yK_fnPHflay8WERkJCiAZKiQdRzSdAoWEHMIcHUV0zyQ",
+          "p": "5vCLjiun0UjKhyJE9Vl1OUgcKDHpRiHl-V1sa1yCETWb80wGJY_d7mVg7Bxof-1ZUqXGIC-TjdYcEZpJJJQqnVcU_UOUS5W6BYWNtGZKwgIk4WVmrzKyG5iASj7RItHt1pyg4_RyzM2Y00VjdKaMwGVehNA0N4J02OQjCu7V6eM",
+          "q": "tseCwS4cuhRBioaU8D8IrrETiWyJMWx39-XW0RQ6WMnbhZTQXbAXzeEFtsc1XlWkkA61QAyOfgHxf0Vkg7D7Q-drEkX9CZRiqkjsZzMd4k6wW7EApuvqThGNvkpJoDjQouXYNi77tqxAWaEZjgELITxtXTem94YD4HslGpGh5b8",
+          "dp": "yVQ_dawdW1ioJ3L6xyI8DboNwgTxJxD6WpDVqis1wScJU-udGDX59pEvE-gYOh6DVofq17hiXK6iPb5Rsa_yDsUSKVE3AUYArDuoM_NRjR0tZcpu4KHDoEcs4I0u6bo2LHjT0qcTRfSfHOBLOjDQWBKHeiXAv_vdPhB1dFyO5J0",
+          "dq": "AqezRosc77cLnK-HylWgEqmP1xc0hvtEYt172V2p21BTWAVpYXMFZYA3TQhnxg8IbO9Jwrxr9XihwW-InkEb5UifTYymuFTnegHFLVqYvIjYFvzjPYl_xdKLdJAvsZwhq7wa_-5-yZCG_sZQULfDKaBvFkOQsVfJBqHDUDd9WpE",
+          "qi": "UAmfyb9PcoUXbJ-g4GpKU1d3rt9LVK8fZa1XASD09cYVmhgywLQ-tsKADp5LTahuCc8sT8bNx3Zucp6VFL_4JwN8wgN6moLQsI6-jNnAAK2FV-SqXsOzZYX8VTM2Jg5fyIRHTnS0rUcSHdcKl4QlBmSNBY-bUmL0MF4yUz0auwg"
+        }
+      ]
+    }
+  }
+}

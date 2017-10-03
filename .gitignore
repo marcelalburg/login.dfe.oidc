@@ -67,4 +67,3 @@ typings/
 src/keystore.json
 ssl/**
 .idea
-config/*.json
