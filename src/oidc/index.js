@@ -2,6 +2,7 @@
 
 const RequestVerification = require('./../RequestVerification/RequestVerification');
 const bodyParser = require('body-parser');
+const config = require('./../Config');
 
 const parse = bodyParser.urlencoded({ extended: false });
 
