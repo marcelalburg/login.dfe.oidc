@@ -1,61 +1,48 @@
 'use strict';
 
+const fs = require('fs');
+const Path = require('path');
 
-const isDev = (process.env.NODE_ENV ? process.env.NODE_ENV : 'dev') === 'dev';
+const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
+const isDev = env === 'dev';
 
-const hotConfigAuthTypes = [
-  {
-    type: 'secret',
-    jwt: process.env.CLIENTS_TOKEN,
-  },
-  {
-    type: 'aad',
-    tenant: process.env.CLIENTS_AAD_TENANT,
-    authorityHostUrl: process.env.CLIENTS_AAD_AUTHORITY,
-    clientId: process.env.CLIENTS_AAD_CLIENT_ID,
-    clientSecret: process.env.CLIENTS_AAD_CLIENT_SECRET,
-    resource: process.env.CLIENTS_AAD_RESOURCE,
-  },
-];
-
-const getHotConfigAuthOptions = () => {
-  const strategy = (process.env.CLIENTS_TOKEN !== undefined) ? 'secret' : 'aad';
-  return hotConfigAuthTypes.find(a => a.type === strategy);
+const getSettingsObject = (settings) => {
+  try {
+    return JSON.parse(settings);
+  } catch (e) {
+    return null;
+  }
 };
 
-
-module.exports = {
-  loggerSettings: {
-    levels: {
-      info: 0,
-      ok: 1,
-      error: 2,
-    },
-    colors: {
-      info: 'yellow',
-      ok: 'green',
-      error: 'red',
-    },
-  },
-  requestVerification: {
-    isEnabled:
-      (process.env.REQUEST_VERIFICATION_ENABLED === undefined
-        || process.env.REQUEST_VERIFICATION_ENABLED === null)
-        ? false
-        : process.env.REQUEST_VERIFICATION_ENABLED.toLowerCase() === 'true',
-  },
-  hotConfig: {
-    url: process.env.CLIENTS_URL,
-    auth: getHotConfigAuthOptions(),
-
-    async getBearerToken() {
-      return process.env.CLIENTS_TOKEN;
-    },
-  },
-  hostingEnvironment: {
-    env: process.env.NODE_ENV ? process.env.NODE_ENV : 'dev',
-    host: process.env.HOST ? process.env.HOST : 'localhost',
-    port: process.env.PORT ? process.env.PORT : 4431,
-    protocol: isDev ? 'https' : 'http',
-  },
+const getSettingsFromFile = (settingsPath) => {
+  if (fs.existsSync(settingsPath)) {
+    const file = fs.readFileSync(settingsPath, 'utf8');
+    try {
+      return JSON.parse(file);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
 };
+
+const fetchConfig = () => {
+  if (process.env.settings) {
+    const settings = process.env.settings;
+    let settingsObject = getSettingsObject(settings);
+    if (settingsObject !== null) {
+      return settingsObject;
+    }
+    const settingsPath = Path.resolve(settings);
+    if (fs.existsSync(settingsPath)) {
+      settingsObject = getSettingsFromFile(settingsPath);
+      if (settingsObject !== null) {
+        return settingsObject;
+      }
+    }
+  }
+
+  throw new Error('Missing configuration');
+};
+
+module.exports = fetchConfig();

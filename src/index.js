@@ -27,7 +27,7 @@ app.use(morgan('dev'));
 
 
 // TODO : Work out the URL based on the ENV...
-const oidc = new Provider(`https://${process.env.HOST}:${process.env.PORT}`, {
+const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -59,7 +59,7 @@ oidc.initialize({
   adapter,
 }).then(() => {
   app.proxy = true;
-  app.keys = process.env.SECURE_KEY.split(',');
+  app.keys = config.secureKey.split(',');
 }).then(() => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
@@ -79,7 +79,7 @@ oidc.initialize({
     const server = https.createServer(options, app);
 
     server.listen(port, () => {
-      logger.info(`Dev server listening on https://${process.env.HOST}:${process.env.PORT}`);
+      logger.info(`Dev server listening on https://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
     });
   } else {
     app.listen(port);
