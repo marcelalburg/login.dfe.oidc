@@ -46,8 +46,8 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     requestUri: true,
     revocation: true,
     rejectUnauthorized: false,
-    sessionManagement: true
-  }
+    sessionManagement: true,
+  },
 });
 
 // TODO : Work out a better way of managing Keys when not in Dev...
@@ -70,10 +70,10 @@ oidc.initialize({
   const port = config.hostingEnvironment.port;
   if (isDev) {
     const options = {
-      key: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.key') : null,
-      cert: (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'dev') ? fs.readFileSync('./ssl/localhost.cert') : null,
+      key: config.hostingEnvironment.sslKey,
+      cert: config.hostingEnvironment.sslCert,
       requestCert: false,
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     };
 
     const server = https.createServer(options, app);

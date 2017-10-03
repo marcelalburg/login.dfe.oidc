@@ -16,7 +16,7 @@ class RequestVerification {
       return true;
     }
 
-    const publicKey = fs.readFileSync('./ssl/interactions.cert', 'utf8');
+    const publicKey = config.requestVerification.cert;
     const userId = req.body.uid;
     const sig = req.body.sig;
 
