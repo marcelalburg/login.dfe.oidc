@@ -1,6 +1,6 @@
 'use strict';
 
-const RequestVerification = require('./../RequestVerification/RequestVerification');
+const RequestVerification = require('login.dfe.request-verification');
 const bodyParser = require('body-parser');
 const config = require('./../Config');
 
@@ -28,8 +28,11 @@ const init = (app, oidc) => {
   });
 
   app.post('/interaction/:grant/complete', parse, (req, res) => {
+    const contents = JSON.stringify({ uuid: req.params.grant, uid: req.body.uid });
+
     const requestVerification = new RequestVerification();
-    const verified = requestVerification.verifyRequest(req);
+    const verified = requestVerification.verifyRequest(
+      contents, config.requestVerification.cert ,req.body.sig);
 
     if (verified) {
       oidc.interactionFinished(req, res, {
