@@ -27,6 +27,17 @@
       "resource": "f5f9ce9f-aef8-4993-a3d3-7c90142addb7"
     }
   },
+  "accounts": {
+    "url": "",
+    "auth": {
+      "type": "aad",
+      "tenant": "",
+      "authorityHostUrl": "",
+      "clientId": "",
+      "clientSecret": "",
+      "resource": ""
+    }
+  },
   "hostingEnvironment": {
     "env": "dev",
     "host": "localhost",
