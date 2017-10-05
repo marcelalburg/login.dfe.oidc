@@ -1,1 +1,16 @@
-[{"client_id": "foo", "client_secret": "bamr", "redirect_uris": ["https://localhost:1234/asdasd"]}]
+[
+  {
+    "client_id": "self",
+    "client_secret": "z3GDmGEF4VudHWf",
+    "redirect_uris": [
+      "https://localhost:4430/dev/cb"
+    ]
+  },
+  {
+    "client_id": "foo",
+    "client_secret": "bamr",
+    "redirect_uris": [
+      "https://localhost:1234/asdasd"
+    ]
+  }
+]
