@@ -1,1 +1,2 @@
-module.exports = (process.env.CLIENTS_URL !== undefined) ? require('../HotConfig/HotConfigApiAdapter') : require('../HotConfig/HotConfigFileAdapter');
+const config = require('./../Config');
+module.exports = (config && config.hotConfig && config.hotConfig.url) ? require('../HotConfig/HotConfigApiAdapter') : require('../HotConfig/HotConfigFileAdapter');
