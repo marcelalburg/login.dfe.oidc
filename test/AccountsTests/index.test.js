@@ -16,7 +16,7 @@ describe('When constructing the accounts', () => {
 
   let sandbox;
   let Accounts;
-  let hotconfigApiAdapter
+  let hotconfigApiAdapter;
   const ctx = {oidc:{client:{clientId: '1234' }}};
 
   beforeEach(() => {
