@@ -12,6 +12,8 @@ const config = require('./Config');
 const morgan = require('morgan');
 const winston = require('winston');
 const developmentViews = require('./dev');
+const Accounts = require('./Accounts');
+
 const app = express();
 const logger = new (winston.Logger)({
   colors: config.loggerSettings.colors,
@@ -29,6 +31,12 @@ app.use(morgan('dev'));
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
+  findById: Accounts.findById,
+  claims: {
+    // scope: [claims] format
+    openid: ['sub'],
+    email: ['email'],
+  },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
   },

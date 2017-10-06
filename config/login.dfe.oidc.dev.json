@@ -27,6 +27,17 @@
       "resource": ""
     }
   },
+  "accounts": {
+    "url": "",
+    "auth": {
+      "type": "aad",
+      "tenant": "",
+      "authorityHostUrl": "",
+      "clientId": "",
+      "clientSecret": "",
+      "resource": ""
+    }
+  },
   "hostingEnvironment": {
     "showDevViews": "true",
     "env": "dev",
