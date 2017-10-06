@@ -47,6 +47,7 @@ class Account {
       let returnValue = null;
       if (response.statusCode === 200) {
         if (!response.body) {
+          logger.warn(`user not found Id:${id}`)
           return null;
         }
         const user = JSON.parse(response.body);
@@ -56,7 +57,7 @@ class Account {
       }
       return null;
     } catch (e) {
-      logger.warn(`user not found ${e}`)
+      logger.warn(`user not found Id:${id} error: ${e}`);
       return null;
     }
   }
