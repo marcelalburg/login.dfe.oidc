@@ -11,6 +11,7 @@ const useOidc = require('./oidc');
 const config = require('./Config');
 const morgan = require('morgan');
 const winston = require('winston');
+const developmentViews = require('./dev');
 const Accounts = require('./Accounts');
 
 const app = express();
@@ -23,7 +24,7 @@ const logger = new (winston.Logger)({
 
 
 app.set('logger', logger);
-app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
+app.use(morgan('combined', {stream: fs.createWriteStream('./access.log', {flags: 'a'})}));
 app.use(morgan('dev'));
 
 
@@ -57,11 +58,12 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   },
 });
 
-// TODO : Work out a better way of managing Keys when not in Dev...
 const keystore = config.oidc.keyStore;
+if (config.hostingEnvironment.showDevViews === 'true') {
+  app.use(developmentViews);
+}
 
 oidc.initialize({
-
   keystore,
   adapter,
 }).then(() => {
@@ -75,12 +77,13 @@ oidc.initialize({
 }).then(() => {
   const isDev = config.hostingEnvironment.env === 'dev';
   const port = config.hostingEnvironment.port;
+
   if (isDev) {
     const options = {
       key: config.hostingEnvironment.sslKey,
       cert: config.hostingEnvironment.sslCert,
       requestCert: false,
-      rejectUnauthorized: false,
+      rejectUnauthorized: false
     };
 
     const server = https.createServer(options, app);

@@ -39,6 +39,7 @@
     }
   },
   "hostingEnvironment": {
+    "showDevViews": "true",
     "env": "dev",
     "host": "localhost",
     "port": "4430",
