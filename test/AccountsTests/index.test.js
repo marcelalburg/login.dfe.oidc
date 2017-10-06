@@ -2,9 +2,9 @@ const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const request = require('request-promise');
-const HotConfig = require('../../src/HotConfig/HotConfigFileAdapter')
+const HotConfig = require('../../src/HotConfig/HotConfigFileAdapter');
 
-const expectedDirectoriesUrl = 'http://directories.local';
+const expectedDirectoriesUrl = 'http://directories.local/';
 const expectedDirectoriesToken = 'super-secret-super-token';
 
 describe('When constructing the accounts', () => {
@@ -12,12 +12,19 @@ describe('When constructing the accounts', () => {
     accounts: {
       url: expectedDirectoriesUrl,
     },
+    loggerSettings: {
+      colors: {
+        info: 'yellow',
+        ok: 'green',
+        error: 'red',
+      },
+    },
   };
 
   let sandbox;
   let Accounts;
   let hotconfigApiAdapter;
-  const ctx = {oidc:{client:{clientId: '1234' }}};
+  const ctx = { oidc: { client: { clientId: '1234' } } };
 
   beforeEach(() => {
     Accounts = proxyquire('../../src/Accounts/index', {
@@ -29,10 +36,10 @@ describe('When constructing the accounts', () => {
           },
         };
       },
-      '../HotConfig': function() {
+      '../HotConfig': function () {
         return {
           async find(id) {
-            return Promise.resolve({params:{directoryId: '54321'}});
+            return Promise.resolve({ params: { directoryId: '54321' } });
           },
         };
       },
@@ -48,7 +55,7 @@ describe('When constructing the accounts', () => {
       const mock = sinon.mock(request);
       mock.expects('get').once().returns('[{}]');
 
-      await Accounts.findById(ctx,'test');
+      await Accounts.findById(ctx, 'test');
 
       mock.verify();
     });
@@ -69,21 +76,21 @@ describe('When constructing the accounts', () => {
     it('null is returned if there is no data returned in the response', async () => {
       sandbox.stub(request, 'get').returns(null, { statusCode: 200 }, null);
 
-      Accounts.findById(ctx,'test').then((actual) => {
+      Accounts.findById(ctx, 'test').then((actual) => {
         expect(actual).to.equal(null);
       });
     });
     it('null is returned if the Id is not found', () => {
       sandbox.stub(request, 'get').returns({ statusCode: 200, body: '' });
 
-      return Accounts.findById(ctx,'foo1').then((actual) => {
+      return Accounts.findById(ctx, 'foo1').then((actual) => {
         expect(actual).to.equal(null);
       });
     });
     it('a new account object is returned with claims if found', () => {
-      sandbox.stub(request, 'get').returns({ statusCode: 200, body: '{"id":"123456","name":"Test User", "given_name":"Test", "family_name":"User", "email":"test@test.com"}' });
+      sandbox.stub(request, 'get').returns({ statusCode: 200, body: '{"sub":"123456","name":"Test User", "given_name":"Test", "family_name":"User", "email":"test@test.com"}' });
 
-      return Accounts.findById(ctx,'test@test.com').then((actual) => {
+      return Accounts.findById(ctx, 'test@test.com').then((actual) => {
         expect(actual).to.be.instanceOf(Accounts);
         expect(actual.claims().sub).to.equal('123456');
       });
