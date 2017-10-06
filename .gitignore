@@ -67,3 +67,7 @@ typings/
 src/keystore.json
 ssl/**
 .idea
+
+#config
+/config/
+!/config/login.dfe.directories.dev.json
