@@ -38,7 +38,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     email: ['email'],
   },
   interactionUrl(ctx) {
-    return `/interaction/${ctx.oidc.uuid}`;
+    return `/interaction/${ctx.oidc.uuid}?clientid=${ctx.oidc.client.clientId}`;
   },
   // TODO deployment configuration
   features: {
