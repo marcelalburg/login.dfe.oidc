@@ -18,8 +18,8 @@ const app = express();
 const logger = new (winston.Logger)({
   colors: config.loggerSettings.colors,
   transports: [
-    new (winston.transports.Console)({level: 'info', colorize: true})
-  ]
+    new (winston.transports.Console)({ level: 'info', colorize: true }),
+  ],
 });
 
 
