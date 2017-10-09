@@ -12,7 +12,7 @@ const init = (app, oidc) => {
     oidc.interactionDetails(req).then((details) => {
       app.get('logger').info('see what else is available to you for interaction views', details);
 
-      const url = `${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword`;
+      const url = `${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}`;
       res.redirect(url);
     });
   });
