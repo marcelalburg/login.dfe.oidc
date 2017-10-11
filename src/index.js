@@ -36,6 +36,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     // scope: [claims] format
     openid: ['sub'],
     email: ['email'],
+    profile: ['email', 'given_name', 'family_name'],
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
