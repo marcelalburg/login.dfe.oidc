@@ -47,11 +47,11 @@ class Account {
       let returnValue = null;
       if (response.statusCode === 200) {
         if (!response.body) {
-          logger.warn(`user not found Id:${id}`)
+          logger.warn(`user not found Id:${id}`);
           return null;
         }
         const user = JSON.parse(response.body);
-        logger.info(`user returned : ${user}`)
+        logger.info(`user returned : ${user}`);
         returnValue = user === undefined ? null : user;
         return new Account(returnValue);
       }
