@@ -40,9 +40,10 @@
                 <h1 class="heading-xlarge">
                     Sign Out
                 </h1>
-                <p class="lede">You are about to sign out, are you sure?.</p>
+                <p class="lede">You are about to sign out, are you sure?</p>
                 <%- form %>
-                <button class="button" onclick="logout()">Yes, sign out</button>
+                <button class="button" onclick="logout()">Yes</button>
+                &nbsp;&nbsp;&nbsp;
                 <a href="#">No</a>
             </div>
 
@@ -60,6 +61,7 @@
             form.appendChild(input);
             form.submit();
           }
+          logout();
         </script>
     </main>
 </div>
