@@ -42,24 +42,25 @@
                 </h1>
                 <p class="lede">You are about to sign out, are you sure?.</p>
                 <%- form %>
+                <button class="button" onclick="logout()">Yes, sign out</button>
+                <a href="#">No</a>
             </div>
-            <script>
-              function logout() {
-                var form = document.forms[0];
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'logout';
-                input.value = 'yes';
-                form.appendChild(input);
-                form.submit();
-              }
-            </script>
-            ${form}
-            <button onclick="logout()">Yes</button>
+
+
             <!--<button onclick="document.forms[0].submit()">Please, don't!</button>-->
         </div>
 
-
+        <script>
+          function logout() {
+            var form = document.forms[0];
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'logout';
+            input.value = 'yes';
+            form.appendChild(input);
+            form.submit();
+          }
+        </script>
     </main>
 </div>
 
