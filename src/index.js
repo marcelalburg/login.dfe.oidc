@@ -13,6 +13,7 @@ const morgan = require('morgan');
 const winston = require('winston');
 const developmentViews = require('./dev');
 const Accounts = require('./Accounts');
+const logoutAction = require('./logout');
 
 const app = express();
 const logger = new (winston.Logger)({
@@ -24,13 +25,14 @@ const logger = new (winston.Logger)({
 
 
 app.set('logger', logger);
-app.use(morgan('combined', {stream: fs.createWriteStream('./access.log', {flags: 'a'})}));
+app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
 
 
 // TODO : Work out the URL based on the ENV...
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
+  logoutSource: logoutAction,
   findById: Accounts.findById,
   claims: {
     // scope: [claims] format
@@ -84,7 +86,7 @@ oidc.initialize({
       key: config.hostingEnvironment.sslKey,
       cert: config.hostingEnvironment.sslCert,
       requestCert: false,
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     };
 
     const server = https.createServer(options, app);
@@ -99,3 +101,8 @@ oidc.initialize({
   .catch((e) => {
     logger.info(e);
   });
+
+
+process.on('unhandledRejection', (reason, p) => {
+  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
+});
