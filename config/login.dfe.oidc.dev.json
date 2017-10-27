@@ -55,6 +55,7 @@
   "oidc": {
     "secureKey": "foo,bar",
     "interactionBaseUrl" :"https://localhost:4430",
+    "redisConnectionString": "redis://127.0.0.1:6379?db=1",
     "keyStore": {
       "keys": [
         {

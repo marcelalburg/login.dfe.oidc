@@ -2,6 +2,7 @@
 'use strict';
 const Redis = require('ioredis');
 const epochTime = require('../helpers/epoch_time');
+const config = require('./../Config');
 
 
 function grantKeyFor(id) {
@@ -10,7 +11,7 @@ function grantKeyFor(id) {
 
 const get = (key) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
+    const redisClient = new Redis(config.oidc.redisConnectionString);
     try {
       redisClient.get(key).then((result) => {
         resolve(JSON.parse(result));
@@ -23,7 +24,7 @@ const get = (key) => {
 };
 const set = (key, value) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
+    const redisClient = new Redis(config.oidc.redisConnectionString);
     try {
       redisClient.set(key, JSON.stringify(value)).then(() => {
         resolve();
@@ -36,7 +37,7 @@ const set = (key, value) => {
 };
 const del = (key) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
+    const redisClient = new Redis(config.oidc.redisConnectionString);
     try {
       redisClient.del(key).then(() => {
         resolve();
