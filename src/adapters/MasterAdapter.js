@@ -3,6 +3,7 @@
 const genericAdapter = require('./GenericAdapter');
 
 const hotConfigAdapter = require('../HotConfig');
+const RedisAdapter = require('./RedisAdapter');
 
 
 const adapterMapping = [
@@ -24,7 +25,7 @@ class MasterAdapter {
   constructor(name) {
     this.name = name;
     let innerAdapter = adapterMapping.find((mapping)  => { return mapping.name === name; });
-    this.innerAdapter = innerAdapter ? innerAdapter.adapter : new genericAdapter(name);
+    this.innerAdapter = innerAdapter ? innerAdapter.adapter : new RedisAdapter(name);
   }
 
   /**
