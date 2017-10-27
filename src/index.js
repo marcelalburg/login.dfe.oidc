@@ -67,7 +67,7 @@ if (config.hostingEnvironment.showDevViews === 'true') {
   app.use(developmentViews);
 }
 if (config.clientManagement.enabled) {
-  app.use('/manage-client', clientManagement);
+  app.use('/manage-client', clientManagement(oidc));
 }
 
 oidc.initialize({
