@@ -38,6 +38,11 @@
       "resource": ""
     }
   },
+  "clientManagement": {
+    "enabled": true,
+    "connectionString": "redis://127.0.0.1:6379",
+    "sessionKey": "refer-dulcimer-deviate-acre-forsook"
+  },
   "hostingEnvironment": {
     "showDevViews": "true",
     "env": "dev",

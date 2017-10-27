@@ -12,6 +12,7 @@ const config = require('./Config');
 const morgan = require('morgan');
 const winston = require('winston');
 const developmentViews = require('./dev');
+const clientManagement = require('./clientManagement');
 const Accounts = require('./Accounts');
 const logoutAction = require('./logout');
 
@@ -64,6 +65,9 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
 const keystore = config.oidc.keyStore;
 if (config.hostingEnvironment.showDevViews === 'true') {
   app.use(developmentViews);
+}
+if (config.clientManagement.enabled) {
+  app.use('/manage-client', clientManagement(oidc));
 }
 
 oidc.initialize({
