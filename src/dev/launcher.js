@@ -7,7 +7,7 @@ const get = (req, res) => {
 };
 
 const post = (req, res) => {
-  res.redirect(`/auth?client_id=${req.body.client_id}&response_type=code&scope=openid&return_uri=${req.body.return_url}`);
+  res.redirect(`/auth?client_id=${req.body.client_id}&response_type=code&scope=openid&redirect_uri=${req.body.return_url}`);
 };
 
 const logout = async (req, res) => {
