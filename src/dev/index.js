@@ -10,6 +10,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', launcher.get);
 router.post('/', launcher.post);
-router.get('/logout', launcher.logout)
+router.get('/logout', launcher.logout);
 
 module.exports = router;
