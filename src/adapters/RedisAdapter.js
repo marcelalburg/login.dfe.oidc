@@ -10,10 +10,10 @@ function grantKeyFor(id) {
 
 const get = (key) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379'); //TODO: Get connection string
+    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
     try {
       redisClient.get(key).then((result) => {
-        resolve(result);
+        resolve(JSON.parse(result));
       });
     } catch (e) {
       redisClient.disconnect();
@@ -23,9 +23,9 @@ const get = (key) => {
 };
 const set = (key, value) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379'); //TODO: Get connection string
+    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
     try {
-      redisClient.set(key, value).then(() => {
+      redisClient.set(key, JSON.stringify(value)).then(() => {
         resolve();
       });
     } catch (e) {
@@ -36,9 +36,9 @@ const set = (key, value) => {
 };
 const del = (key) => {
   return new Promise((resolve, reject) => {
-    const redisClient = new Redis('redis://127.0.0.1:6379'); //TODO: Get connection string
+    const redisClient = new Redis('redis://127.0.0.1:6379?db=1'); //TODO: Get connection string
     try {
-      redisClient.det(key, value).then(() => {
+      redisClient.del(key).then(() => {
         resolve();
       });
     } catch (e) {
@@ -61,6 +61,7 @@ class RedisAdapter {
 
   async destroy(id) {
     const key = this.key(id);
+    console.info(`destroy ${key}`);
     const x = await get(key);
     const grantId = x && x.grantId;
 
@@ -70,24 +71,28 @@ class RedisAdapter {
       const grantKey = grantKeyFor(grantId);
       const grant = await get(grantKey);
       for (let i = 0; i < grant.length; i++) {
-        del(grant(i));
+        await del(grant(i));
       }
     }
   }
 
   async consume(id) {
     const key = this.key(id);
+    console.info(`consume ${key}`);
     const item = await get(key);
     item.consumed = epochTime();
     await set(key, item);
   }
 
-  find(id) {
-    return get(this.key(id));
+  async find(id) {
+    const key = this.key(id);
+    console.info(`find ${key}`);
+    return await get(key);
   }
 
   async upsert(id, payload, expiresIn) {
     const key = this.key(id);
+    console.info(`upsert ${key}`);
 
     const { grantId } = payload;
     if (grantId) {
@@ -96,7 +101,7 @@ class RedisAdapter {
       if (grant) {
         grant.push(key);
       }
-      set(grantKey, [key]);
+      await set(grantKey, [key]);
     }
 
     await set(key, payload); //, expiresIn * 1000);
