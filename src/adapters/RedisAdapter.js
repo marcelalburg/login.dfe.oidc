@@ -3,7 +3,8 @@
 const Redis = require('ioredis');
 const epochTime = require('../helpers/epoch_time');
 const config = require('./../Config');
-const redisClient = new Redis(config.oidc.redisConnectionString);
+
+let redisClient;
 
 function grantKeyFor(id) {
   return `grant:${id}`;
@@ -16,6 +17,7 @@ const get = (key) => {
         resolve(JSON.parse(result));
       });
     } catch (e) {
+      redisClient.disconnect();
       reject(e);
     }
   });
@@ -27,6 +29,7 @@ const set = (key, value) => {
         resolve();
       });
     } catch (e) {
+      redisClient.disconnect();
       reject(e);
     }
   });
@@ -38,6 +41,7 @@ const del = (key) => {
         resolve();
       });
     } catch (e) {
+      redisClient.disconnect();
       reject(e);
     }
   });
@@ -48,6 +52,11 @@ class RedisAdapter {
 
   constructor(name) {
     this.name = name;
+    if (!redisClient && config) {
+      redisClient = new Redis(config.oidc.redisConnectionString);
+    }else{
+
+    }
   }
 
   key(id) {
