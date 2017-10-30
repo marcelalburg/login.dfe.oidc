@@ -11,6 +11,7 @@ const useOidc = require('./oidc');
 const config = require('./Config');
 const morgan = require('morgan');
 const winston = require('winston');
+const uuid = require('uuid/v4');
 const developmentViews = require('./dev');
 const clientManagement = require('./clientManagement');
 const Accounts = require('./Accounts');
@@ -43,6 +44,15 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
+  },
+  async interactionCheck(ctx) {
+    if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
+      const sid = uuid();
+      ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
+      await ctx.oidc.session.save();
+    }
+
+    return false;
   },
   // TODO deployment configuration
   features: {
