@@ -52,5 +52,11 @@
     "mocha": "^3.5.3",
     "proxyquire": "^1.8.0",
     "sinon": "^3.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": false,
+    "clearMocks": true,
+    "testRegex": ".*\\.spec.js$"
   }
 }
