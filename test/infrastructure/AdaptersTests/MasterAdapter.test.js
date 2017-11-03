@@ -1,6 +1,6 @@
-const MasterAdapter = require('../../src/adapters/MasterAdapter');
-const RedisAdapter = require('../../src/adapters/RedisAdapter');
-const HotConfigAdapter = require('../../src/HotConfig/HotConfigAdapter');
+const MasterAdapter = require('./../../../src/infrastructure/adapters/MasterAdapter');
+const RedisAdapter = require('./../../../src/infrastructure/adapters/RedisAdapter');
+const HotConfigAdapter = require('./../../../src/infrastructure/HotConfig/HotConfigAdapter');
 
 describe('When constructing the adapter', () => {
   describe('then if no override is defined', () => {

@@ -1,8 +1,8 @@
 /* eslint-disable */
 'use strict';
 const Redis = require('ioredis');
-const epochTime = require('../helpers/epoch_time');
-const config = require('./../Config');
+const epochTime = require('./../helpers/epoch_time');
+const config = require('./../Config/index');
 
 let redisClient;
 

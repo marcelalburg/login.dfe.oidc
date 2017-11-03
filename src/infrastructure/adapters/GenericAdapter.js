@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use strict';
 const LRU = require('lru-cache');
-const epochTime = require('../helpers/epoch_time');
+const epochTime = require('./../helpers/epoch_time');
 
 const storage = new LRU({});
 

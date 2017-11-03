@@ -7,7 +7,7 @@ jest.mock('path', () => {
   };
 });
 
-const HotConfigFileAdapter = require('../../src/HotConfig/HotConfigFileAdapter');
+const HotConfigFileAdapter = require('./../../../src/infrastructure/HotConfig/HotConfigFileAdapter');
 
 describe('When using the HotConfigFileAdapter', () => {
   describe('and finding clients by Id', function () {

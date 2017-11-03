@@ -3,7 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const config = require('./../Config');
+const config = require('./../../infrastructure/Config/index');
 const Redis = require('ioredis');
 
 const init = (oidcProvider) => {
@@ -89,7 +89,7 @@ const init = (oidcProvider) => {
 
     const redirectUrls = client.redirect_uris.reduce((x, y) => `${x}\n${y}`);
 
-    res.render('clientManagement/manage', {
+    res.render('clientManagement/views/manage', {
       redirectUrls,
       message: '',
     });
@@ -108,14 +108,14 @@ const init = (oidcProvider) => {
     oidcProvider.Client.cacheClear();
 
     const redirectUrls = client.redirect_uris.reduce((x, y) => `${x}\n${y}`);
-    res.render('clientManagement/manage', {
+    res.render('clientManagement/views/manage', {
       redirectUrls,
       message: 'Client updated',
     });
   });
 
   router.get('/login', (req, res) => {
-    res.render('clientManagement/login', {
+    res.render('clientManagement/views/login', {
       message: '',
     });
   });
@@ -128,7 +128,7 @@ const init = (oidcProvider) => {
       req.session.manageClientId = clientId;
       res.redirect('/manage-client');
     } else {
-      res.render('clientManagement/login', {
+      res.render('clientManagement/views/login', {
         message: 'invalid client id / secret',
       });
     }

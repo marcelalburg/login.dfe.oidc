@@ -2,8 +2,8 @@
 
 const RequestVerification = require('login.dfe.request-verification');
 const bodyParser = require('body-parser');
-const config = require('./../Config');
-const interactions = require('./../interactions');
+const config = require('./../../infrastructure/Config/index');
+const interactions = require('./../interactions/index');
 
 const parse = bodyParser.urlencoded({extended: false});
 
@@ -25,7 +25,7 @@ const init = (app, oidc) => {
   });
 
   app.get('/:uuid/usernamepassword', (req, res) => {
-    res.render('usernamepassword', {uuid: req.params.uuid});
+    res.render('oidc/views/usernamepassword', {uuid: req.params.uuid});
   });
 
   app.post('/interaction/:grant/complete', parse, (req, res) => {

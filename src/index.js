@@ -6,16 +6,16 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const express = require('express');
-const adapter = require('./adapters/MasterAdapter');
-const useOidc = require('./oidc');
-const config = require('./Config');
+const adapter = require('./infrastructure/adapters/MasterAdapter');
+const useOidc = require('./app/oidc');
+const config = require('./infrastructure/Config');
 const morgan = require('morgan');
 const winston = require('winston');
 const uuid = require('uuid/v4');
-const developmentViews = require('./dev');
-const clientManagement = require('./clientManagement');
-const Accounts = require('./Accounts');
-const logoutAction = require('./logout');
+const developmentViews = require('./app/dev');
+const clientManagement = require('./app/clientManagement');
+const Accounts = require('./infrastructure/Accounts');
+const logoutAction = require('./app/logout');
 
 const app = express();
 const logger = new (winston.Logger)({
@@ -89,7 +89,7 @@ oidc.initialize({
 }).then(() => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
-  app.set('views', path.resolve(__dirname, 'views'));
+  app.set('views', path.resolve(__dirname, 'app'));
   useOidc(app, oidc);
 }).then(() => {
   const isDev = config.hostingEnvironment.env === 'dev';

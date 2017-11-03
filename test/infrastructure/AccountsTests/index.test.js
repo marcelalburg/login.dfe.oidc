@@ -1,4 +1,4 @@
-jest.mock('./../../src/Config', () => {
+jest.mock('./../../../src/infrastructure/Config', () => {
   return {
     accounts: {
       url: 'http://directories.local/',
@@ -21,7 +21,7 @@ jest.mock('login.dfe.jwt-strategies', () => {
     };
   };
 });
-jest.mock('./../../src/HotConfig', () => {
+jest.mock('./../../../src/infrastructure/HotConfig', () => {
   return jest.fn().mockImplementation(() => {
     return {
       async find(id) {
@@ -32,7 +32,7 @@ jest.mock('./../../src/HotConfig', () => {
 });
 jest.mock('request-promise');
 
-const Accounts = require('./../../src/Accounts');
+const Accounts = require('./../../../src/infrastructure/Accounts/index');
 
 describe('When constructing the accounts', () => {
   let requestGet;

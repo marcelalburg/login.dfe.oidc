@@ -1,9 +1,9 @@
 'use strict';
 
-const logoutSource = require('./../logout');
+const logoutSource = require('./../logout/index');
 
 const get = (req, res) => {
-  res.render('dev/index');
+  res.render('dev/views/index');
 };
 
 const post = (req, res) => {

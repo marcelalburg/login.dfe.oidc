@@ -1,4 +1,4 @@
-jest.mock('./../../src/Config', () => {
+jest.mock('./../../../src/infrastructure/Config', () => {
   return {
     hotConfig: {
       url: 'http://clients.local',
@@ -16,7 +16,7 @@ jest.mock('login.dfe.jwt-strategies', () => {
 });
 jest.mock('request-promise');
 
-const HotConfigApiAdapter = require('../../src/HotConfig/HotConfigApiAdapter');
+const HotConfigApiAdapter = require('./../../../src/infrastructure/HotConfig/HotConfigApiAdapter');
 
 describe('When using the HotConfigApiAdapter', () => {
   describe('and finding clients by Id', () => {
