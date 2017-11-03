@@ -9,8 +9,8 @@ const express = require('express');
 const adapter = require('./infrastructure/adapters/MasterAdapter');
 const useOidc = require('./app/oidc');
 const config = require('./infrastructure/Config');
+const logger = require('./infrastructure/logger');
 const morgan = require('morgan');
-const winston = require('winston');
 const uuid = require('uuid/v4');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
@@ -18,12 +18,6 @@ const Accounts = require('./infrastructure/Accounts');
 const logoutAction = require('./app/logout');
 
 const app = express();
-const logger = new (winston.Logger)({
-  colors: config.loggerSettings.colors,
-  transports: [
-    new (winston.transports.Console)({ level: 'info', colorize: true }),
-  ],
-});
 
 
 app.set('logger', logger);
@@ -115,8 +109,3 @@ oidc.initialize({
   .catch((e) => {
     logger.info(e);
   });
-
-
-process.on('unhandledRejection', (reason, p) => {
-  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
-});
