@@ -11,14 +11,16 @@ const HotConfigFileAdapter = require('./../../../src/infrastructure/HotConfig/Ho
 
 describe('When using the HotConfigFileAdapter', () => {
   describe('and finding clients by Id', () => {
-    let fsReadFileSync;
+    let fsReadFile;
 
     let adapter;
 
     beforeEach(() => {
-      fsReadFileSync = jest.fn().mockReturnValue('[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]');
+      fsReadFile = jest.fn().mockImplementation((filePath, opts, done) => {
+        done(null, '[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]');
+      });
       const fs = require('fs');
-      fs.readFileSync = fsReadFileSync;
+      fs.readFile = fsReadFile;
 
       adapter = new HotConfigFileAdapter('Client');
     });
@@ -26,13 +28,15 @@ describe('When using the HotConfigFileAdapter', () => {
     it('the clients are read from the clients.json in app_data', async () => {
       await adapter.find('client1');
 
-      expect(fsReadFileSync.mock.calls.length).toBe(1);
-      expect(fsReadFileSync.mock.calls[0][0]).toBe('./app_data/clients.json');
-      expect(fsReadFileSync.mock.calls[0][1]).toMatchObject({ encoding: 'utf8' });
+      expect(fsReadFile.mock.calls.length).toBe(1);
+      expect(fsReadFile.mock.calls[0][0]).toBe('./app_data/clients.json');
+      expect(fsReadFile.mock.calls[0][1]).toMatchObject({ encoding: 'utf8' });
     });
 
     it('null is returned if there is no data in the file', async () => {
-      fsReadFileSync.mockReturnValue(null);
+      fsReadFile.mockImplementation((filePath, opts, done) => {
+        done(null, null);
+      });
 
       const actual = await adapter.find('client1');
 
