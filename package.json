@@ -4,7 +4,7 @@
   "description": "Generic OIDC Service for Login.DfE ",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec",
+    "test": "./node_modules/.bin/jest",
     "setup": "node generate-keys.js; ./generate-certs.sh",
     "dev": "settings 'config/login.dfe.oidc.dev.json' node src/index.js"
   },
@@ -40,7 +40,6 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
     "eslint": "^4.8.0",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
@@ -48,15 +47,11 @@
     "gulp": "^3.9.0",
     "gulp-zip": "^3.0.2",
     "jest": "^21.2.1",
-    "jest-cli": "^21.2.1",
-    "mocha": "^3.5.3",
-    "proxyquire": "^1.8.0",
-    "sinon": "^3.3.0"
+    "jest-cli": "^21.2.1"
   },
   "jest": {
     "testEnvironment": "node",
     "collectCoverage": false,
-    "clearMocks": true,
-    "testRegex": ".*\\.spec.js$"
+    "clearMocks": true
   }
 }
