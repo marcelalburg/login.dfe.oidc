@@ -105,7 +105,7 @@ const init = (oidcProvider) => {
     client.redirect_uris = req.body.redirectUrls.split('\n').filter(item => item && item.trim().length > 0).map(item => item.replace('\r', ''));
     await saveClient(client);
 
-    oidcProvider.Client.cacheClear();
+    oidcProvider.clearClientCache();
 
     const redirectUrls = client.redirect_uris.reduce((x, y) => `${x}\n${y}`);
     res.render('clientManagement/views/manage', {
