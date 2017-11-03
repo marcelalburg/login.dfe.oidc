@@ -36,7 +36,6 @@ const Accounts = require('./../../src/Accounts');
 
 describe('When constructing the accounts', () => {
   let requestGet;
-  let request;
 
   const ctx = { oidc: { client: { clientId: '1234' } } };
 
@@ -45,7 +44,7 @@ describe('When constructing the accounts', () => {
       statusCode: 200,
       body: '{"sub":"123456","name":"Test User", "given_name":"Test", "family_name":"User", "email":"test@test.com"}'
     });
-    request = require('request-promise');
+    const request = require('request-promise');
     request.get = requestGet;
   });
 
