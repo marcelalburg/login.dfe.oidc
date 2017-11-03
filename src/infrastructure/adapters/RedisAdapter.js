@@ -6,7 +6,7 @@ const config = require('./../Config/index');
 
 let redisClient;
 
-function grantKeyFor(id) {
+const grantKeyFor = (id) => {
   return `grant:${id}`;
 
 }

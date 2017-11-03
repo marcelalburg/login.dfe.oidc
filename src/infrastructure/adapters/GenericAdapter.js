@@ -5,7 +5,7 @@ const epochTime = require('./../helpers/epoch_time');
 
 const storage = new LRU({});
 
-function grantKeyFor(id) {
+const grantKeyFor = (id) => {
   return `grant:${id}`;
 }
 

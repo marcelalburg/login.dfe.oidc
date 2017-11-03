@@ -10,12 +10,12 @@ jest.mock('path', () => {
 const HotConfigFileAdapter = require('./../../../src/infrastructure/HotConfig/HotConfigFileAdapter');
 
 describe('When using the HotConfigFileAdapter', () => {
-  describe('and finding clients by Id', function () {
+  describe('and finding clients by Id', () => {
     let fsReadFileSync;
 
     let adapter;
 
-    beforeEach(function () {
+    beforeEach(() => {
       fsReadFileSync = jest.fn().mockReturnValue('[{"client_id": "foo", "client_secret": "bar", "redirect_uris": ["http://lvh.me/cb"]}]');
       const fs = require('fs');
       fs.readFileSync = fsReadFileSync;
