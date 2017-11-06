@@ -2,7 +2,7 @@
 'use strict';
 const Redis = require('ioredis');
 const epochTime = require('./../helpers/epoch_time');
-const config = require('./../Config/index');
+const config = require('./../Config');
 
 let redisClient;
 

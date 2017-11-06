@@ -1,6 +1,6 @@
 'use strict';
 
-const logoutSource = require('./../logout/index');
+const logoutSource = require('./../logout');
 
 const get = (req, res) => {
   res.render('dev/views/index');

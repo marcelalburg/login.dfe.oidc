@@ -32,7 +32,7 @@ jest.mock('./../../../src/infrastructure/HotConfig', () => {
 });
 jest.mock('request-promise');
 
-const Accounts = require('./../../../src/infrastructure/Accounts/index');
+const Accounts = require('./../../../src/infrastructure/Accounts');
 
 describe('When constructing the accounts', () => {
   let requestGet;

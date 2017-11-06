@@ -1,9 +1,9 @@
 'use strict';
 
 const request = require('request-promise');
-const config = require('./../Config/index');
+const config = require('./../Config');
 const jwtStrategy = require('login.dfe.jwt-strategies');
-const HotConfigAdapter = require('./../HotConfig/index');
+const HotConfigAdapter = require('./../HotConfig');
 const winston = require('winston');
 
 const logger = new (winston.Logger)({

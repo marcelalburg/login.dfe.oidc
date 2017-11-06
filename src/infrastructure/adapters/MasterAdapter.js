@@ -2,7 +2,7 @@
 'use strict';
 const genericAdapter = require('./GenericAdapter');
 
-const hotConfigAdapter = require('./../HotConfig/index');
+const hotConfigAdapter = require('./../HotConfig');
 const RedisAdapter = require('./RedisAdapter');
 
 
