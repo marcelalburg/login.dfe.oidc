@@ -1,9 +1,10 @@
 'use strict';
 
+const listEndpoints = require('express-list-endpoints');
 const logoutSource = require('./../logout');
 
 const get = (req, res) => {
-  res.render('dev/views/index');
+  res.render('dev/views/index', { routes: listEndpoints(req.app) });
 };
 
 const post = (req, res) => {
