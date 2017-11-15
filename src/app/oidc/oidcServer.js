@@ -4,10 +4,12 @@ const config = require('./../../infrastructure/Config');
 const Provider = require('oidc-provider');
 const Accounts = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
+const errorAction = require('./../error');
 
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
   logoutSource: logoutAction,
+  renderError: errorAction,
   findById: Accounts.findById,
   claims: {
     // scope: [claims] format
