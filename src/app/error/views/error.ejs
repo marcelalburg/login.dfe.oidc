@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><%= locals.title || 'Login.DfE.oidc' %></title>
+    <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/fonts.css">
+    <link rel="stylesheet"
+          href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/govuk/govuk-template.css">
+    <link rel="stylesheet" href="https://rawgit.com/DFE-Digital/dfe.ui.toolkit/master/dist/css/screen.css">
+</head>
+<body>
+
+<script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+<div id="skiplink-container">
+    <div>
+        <a href="#content" class="skiplink"></a>
+    </div>
+</div>
+
+<div id="global-cookie-message">
+    <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about
+            cookies</a></p>
+</div>
+
+<div class="wrapper">
+
+    <header id="global-header" class="with-proposition">
+        <div class="header-wrapper">
+            <div class="identity">Department for Education</div>
+        </div>
+    </header>
+
+    <div id="global-header-bar"></div>
+
+    <main id="content" tabindex="-1">
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h1 class="heading-xlarge">
+                    Error
+                </h1>
+                <p class="lede">
+                    <%= locals.error %>
+                </p>
+                <p>
+                    <%= locals.description%>
+                </p>
+                <p>
+                    <%= locals.state%>
+                </p>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<footer id="footer">
+    <div class="footer-wrapper">
+        <nav>
+            <ul>
+                <li><a href="cookies.html">Cookies</a></li>
+                <li><a href="privacy.html">Privacy policy</a></li>
+                <li><a href="terms.html">Terms and conditions</a></li>
+            </ul>
+        </nav>
+    </div>
+</footer>
+</body>
+</html>
