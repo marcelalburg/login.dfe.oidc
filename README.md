@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/DFE-Digital/login.dfe.oidc.svg?branch=master)](https://travis-ci.org/DFE-Digital/login.dfe.oidc)
 
+[![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
+
 # login.dfe.oidc
 
 Generic OpenID Connect server for DfE, part of the **login.dfe** project.

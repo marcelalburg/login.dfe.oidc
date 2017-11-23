@@ -20,50 +20,45 @@ const init = (oidcProvider) => {
     resave: true,
   }));
 
-  const getClients = async () => {
-    return new Promise((resolve, reject) => {
-      const redisClient = new Redis(config.clientManagement.connectionString);
-      try {
-        redisClient.get('OIDCClients').then((result) => {
-          if (result === null || result === undefined) {
-            resolve(null);
-          }
-          const clients = JSON.parse(result);
-          resolve(clients);
-        });
-      } catch (e) {
-        redisClient.disconnect();
-        reject(e);
-      }
-    });
-  };
-  const saveClients = (clients) => {
-    return new Promise((resolve, reject) => {
-      const redisClient = new Redis(config.clientManagement.connectionString);
-      try {
-        redisClient.set('OIDCClients', JSON.stringify(clients)).then(() => {
-          resolve();
-        });
-      } catch (e) {
-        redisClient.disconnect();
-        reject(e);
-      }
-    });
-  };
+  const getClients = async () => new Promise((resolve, reject) => {
+    const redisClient = new Redis(config.clientManagement.connectionString);
+    try {
+      redisClient.get('OIDCClients').then((result) => {
+        if (result === null || result === undefined) {
+          resolve(null);
+        }
+        const clients = JSON.parse(result);
+        resolve(clients);
+      });
+    } catch (e) {
+      redisClient.disconnect();
+      reject(e);
+    }
+  });
+  const saveClients = clients => new Promise((resolve, reject) => {
+    const redisClient = new Redis(config.clientManagement.connectionString);
+    try {
+      redisClient.set('OIDCClients', JSON.stringify(clients)).then(() => {
+        resolve();
+      });
+    } catch (e) {
+      redisClient.disconnect();
+      reject(e);
+    }
+  });
   const getClient = async (id) => {
     if (!id) {
       return null;
     }
 
     const clients = await getClients();
-    const client = clients.find(item => item.client_id.toLowerCase() === id.toLowerCase());
-    return client;
+    return clients.find(item => item.client_id.toLowerCase() === id.toLowerCase());
   };
   const saveClient = async (client) => {
     const clients = await getClients();
     const existing = clients.find(item => item.client_id.toLowerCase() === client.client_id.toLowerCase());
     if (existing) {
-      existing.redirect_uris = client.redirect_uris
+      existing.redirect_uris = client.redirect_uris;
     } else {
       clients.push(client);
     }

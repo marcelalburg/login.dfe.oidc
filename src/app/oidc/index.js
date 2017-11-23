@@ -10,7 +10,7 @@ const getDevUsernamePassword = require('./getDevUsernamePassword');
 const postCompleteInteraction = require('./postCompleteInteraction');
 
 const initialize = (app) => {
-  logger.info('initializing oidc')
+  logger.info('initializing oidc');
   const keystore = config.oidc.keyStore;
 
   return oidc.initialize({
