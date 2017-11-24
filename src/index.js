@@ -12,6 +12,9 @@ const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
 
+const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+validateConfigAndQuitOnError(oidcSchema, config, logger);
+
 const app = express();
 
 app.set('logger', logger);
