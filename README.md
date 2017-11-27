@@ -1,6 +1,10 @@
-[![Build Status](https://travis-ci.org/DFE-Digital/login.dfe.oidc.svg?branch=master)](https://travis-ci.org/DFE-Digital/login.dfe.oidc)
+[![Travis Build Status](https://travis-ci.org/DFE-Digital/login.dfe.oidc.svg?branch=master)](https://travis-ci.org/DFE-Digital/login.dfe.oidc)
 
 [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
+
+[![VSTS Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/aa44e142-c0ac-4ace-a6b2-0d9a3f35d516/700/badge)](https://sfa-gov-uk.visualstudio.com/DfE%20New%20Secure%20Access/_build/index?definitionId=700&_a=completed)
+
+
 
 # login.dfe.oidc
 
