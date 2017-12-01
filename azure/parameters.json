@@ -3,14 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "appServicePlanName": {
-            "value": "__AppServicePlanName__"
+            "value": ""
         },
         "appServiceNames": {
-            "value": "__AppServiceName__"
+            "value": ""
         },
         "appServiceConfigPath": {
-            "value": "__AppServiceConfigPath__"
+            "value": ""
         }
-
     }
 }

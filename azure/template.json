@@ -4,13 +4,13 @@
     "parameters": {
         "appServiceName": {
             "type": "string",
-            "metadata":{
+            "metadata": {
                 "description": "The name of the App Service"
             }
         },
         "appServicePlanName": {
             "type": "string",
-            "metadata":{
+            "metadata": {
                 "description": "The name of the App Service Plan"
             }
         },
@@ -49,7 +49,6 @@
                             "name": "settings",
                             "value": "[parameters('appServiceConfigPath')]"
                         }
-                        
                     ],
                     "alwaysOn": true
                 }
