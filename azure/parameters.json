@@ -5,7 +5,7 @@
         "appServicePlanName": {
             "value": ""
         },
-        "appServiceNames": {
+        "appServiceName": {
             "value": ""
         },
         "appServiceConfigPath": {
