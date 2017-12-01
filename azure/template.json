@@ -21,7 +21,7 @@
                 "description": "The default NodeJS version that the App Service will run"
             }
         },
-        "appConfig": {
+        "appServiceConfigPath": {
             "type": "string",
             "metadata": {
                 "description": "JSON string containing app config"
@@ -47,7 +47,7 @@
                         },
                         {
                             "name": "settings",
-                            "value": "[parameters('appConfig')]"
+                            "value": "[parameters('appServiceConfigPath')]"
                         }
                         
                     ],

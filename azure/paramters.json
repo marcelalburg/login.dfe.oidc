@@ -8,8 +8,8 @@
         "appServiceNames": {
             "value": "__AppServiceName__"
         },
-        "appConfig": {
-            "value": "__AppServceConfigPath__"
+        "appServiceConfigPath": {
+            "value": "__AppServiceConfigPath__"
         }
 
     }
