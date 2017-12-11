@@ -7,6 +7,7 @@ const oidc = require('./oidcServer');
 const getInteraction = require('./getInteraction');
 const getConfirmInteraction = require('./getConfirmInteraction');
 const getDevUsernamePassword = require('./getDevUsernamePassword');
+const getDevDigipass = require('./getDevDigipass');
 const postCompleteInteraction = require('./postCompleteInteraction');
 
 const initialize = (app) => {
@@ -24,8 +25,10 @@ const initialize = (app) => {
 
     app.get('/interaction/:grant', getInteraction);
     app.post('/interaction/:grant/confirm', parse, getConfirmInteraction);
-    app.get('/:uuid/usernamepassword', getDevUsernamePassword);
     app.post('/interaction/:grant/complete', parse, postCompleteInteraction);
+
+    app.get('/:uuid/usernamepassword', getDevUsernamePassword);
+    app.get('/:uuid/digipass', getDevDigipass);
 
     app.use(oidc.callback);
   });

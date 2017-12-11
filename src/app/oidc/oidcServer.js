@@ -1,6 +1,6 @@
 const uuid = require('uuid/v4');
 const config = require('./../../infrastructure/Config');
-// const logger = require('./../../infrastructure/logger');
+const logger = require('./../../infrastructure/logger');
 const Provider = require('oidc-provider');
 const Accounts = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
@@ -21,7 +21,30 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     return `/interaction/${ctx.oidc.uuid}`;
   },
   async interactionCheck(ctx) {
+    logger.info('checking interaction');
+    if (!ctx.oidc.session.interactionsCompleted) {
+      ctx.oidc.session.interactionsCompleted = [];
+    }
+
+    if (ctx.oidc.result && ctx.oidc.result.meta && ctx.oidc.result.meta.interactionCompleted) {
+      logger.info(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
+      ctx.oidc.session.interactionsCompleted.push(ctx.oidc.result.meta.interactionCompleted);
+      await ctx.oidc.session.save();
+    }
+
+    if (!ctx.oidc.session.interactionsCompleted.find(x => x === 'digipass')) {
+      logger.info('No digipass completed. Time to do it.');
+      ctx.oidc.result = undefined;
+      return {
+        error: 'login_required',
+        reason: 'digipass_prompt',
+        type: 'digipass',
+      };
+    }
+
+    logger.info('completed all interactions');
     if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
+      logger.info(`adding ${ctx.oidc.client.clientId} to authorized clients`);
       const sid = uuid();
       ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
       await ctx.oidc.session.save();

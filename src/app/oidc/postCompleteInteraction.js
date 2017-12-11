@@ -22,6 +22,7 @@ const postCompleteInteraction = (req, res) => {
     return;
   }
 
+  logger.info(`completing interaction for ${req.body.type}`);
   oidc.interactionFinished(req, res, {
     login: {
       account: req.body.uid, // becomes token
@@ -32,8 +33,11 @@ const postCompleteInteraction = (req, res) => {
     consent: {
       // TODO: remove offline_access from scopes if remember is not checked
     },
+    meta: {
+      interactionCompleted: req.body.type,
+    },
   }).then(((details) => {
-    logger.info('then', details);
+    logger.info(`then ${details}`);
   }));
 };
 
