@@ -1,10 +1,13 @@
 const uuid = require('uuid/v4');
 const config = require('./../../infrastructure/Config');
+const HotConfig = require('./../../infrastructure/HotConfig');
 const logger = require('./../../infrastructure/logger');
 const Provider = require('oidc-provider');
 const Accounts = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
 const errorAction = require('./../error');
+
+const hotConfig = new HotConfig();
 
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
@@ -21,6 +24,8 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     return `/interaction/${ctx.oidc.uuid}`;
   },
   async interactionCheck(ctx) {
+    const client = await hotConfig.find(ctx.oidc.client.clientId);
+
     logger.info('checking interaction');
     if (!ctx.oidc.session.interactionsCompleted) {
       ctx.oidc.session.interactionsCompleted = [];
@@ -32,7 +37,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       await ctx.oidc.session.save();
     }
 
-    if (!ctx.oidc.session.interactionsCompleted.find(x => x === 'digipass')) {
+    if (client.params.digipassRequired && !ctx.oidc.session.interactionsCompleted.find(x => x === 'digipass')) {
       logger.info('No digipass completed. Time to do it.');
       ctx.oidc.result = undefined;
       return {
