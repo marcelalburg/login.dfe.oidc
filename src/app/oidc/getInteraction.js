@@ -7,7 +7,7 @@ const getInteraction = async (req, res) => {
   logger.info('see what else is available to you for interaction views', details);
 
   if(details.interaction.type === 'digipass') {
-    res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
+    res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
   } else {
     res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
   }

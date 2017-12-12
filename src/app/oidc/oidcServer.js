@@ -39,6 +39,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
         error: 'login_required',
         reason: 'digipass_prompt',
         type: 'digipass',
+        uid: ctx.oidc.account.user.sub,
       };
     }
 
