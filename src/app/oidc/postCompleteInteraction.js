@@ -4,7 +4,7 @@ const logger = require('./../../infrastructure/logger');
 const RequestVerification = require('login.dfe.request-verification');
 const interactions = require('./../interactions');
 
-const postCompleteInteraction = (req, res) => {
+const postCompleteInteraction = async (req, res) => {
   const contents = JSON.stringify({ uuid: req.params.grant, uid: req.body.uid });
 
   if (config.requestVerification.isEnabled) {
@@ -22,7 +22,8 @@ const postCompleteInteraction = (req, res) => {
     return;
   }
 
-  oidc.interactionFinished(req, res, {
+  logger.info(`completing interaction for ${req.body.type}`);
+  await oidc.interactionFinished(req, res, {
     login: {
       account: req.body.uid, // becomes token
       acr: '1',
@@ -32,9 +33,10 @@ const postCompleteInteraction = (req, res) => {
     consent: {
       // TODO: remove offline_access from scopes if remember is not checked
     },
-  }).then(((details) => {
-    logger.info('then', details);
-  }));
+    meta: {
+      interactionCompleted: req.body.type,
+    },
+  });
 };
 
 module.exports = postCompleteInteraction;
