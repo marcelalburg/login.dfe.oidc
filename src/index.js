@@ -23,7 +23,7 @@ app.set('logger', logger);
 app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
 
-if (config.hostingEnvironment.showDevViews === 'true') {
+if (config.hostingEnvironment.useDevViews === true) {
   app.use(developmentViews);
 }
 if (config.clientManagement.enabled) {
