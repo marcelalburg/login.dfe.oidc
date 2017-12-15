@@ -16,7 +16,10 @@ const appInsights = require('applicationinsights');
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 validateConfigAndQuitOnError(oidcSchema, config, logger);
 
-appInsights.setup(config.hostingEnvironment.applicationInsights).start();
+if(config.hostingEnvironment.applicationInsights){
+  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
+}
+
 const app = express();
 
 app.set('logger', logger);
