@@ -3,9 +3,6 @@
 const fs = require('fs');
 const Path = require('path');
 
-const env = process.env.NODE_ENV ? process.env.NODE_ENV : 'dev';
-const isDev = env === 'dev';
-
 const getSettingsObject = (settings) => {
   try {
     return JSON.parse(settings);
