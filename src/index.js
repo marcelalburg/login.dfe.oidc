@@ -11,9 +11,15 @@ const morgan = require('morgan');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
+const appInsights = require('applicationinsights');
 
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
+
 validateConfigAndQuitOnError(oidcSchema, config, logger);
+
+if (config.hostingEnvironment.applicationInsights) {
+  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
+}
 
 const app = express();
 
@@ -21,7 +27,7 @@ app.set('logger', logger);
 app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
 
-if (config.hostingEnvironment.showDevViews === 'true') {
+if (config.hostingEnvironment.useDevViews === true) {
   app.use(developmentViews);
 }
 if (config.clientManagement.enabled) {
