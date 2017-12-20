@@ -37,7 +37,7 @@
     "login.dfe.jwt-strategies": "github:DFE-Digital/login.dfe.jwt-strategies#v1.0.4",
     "login.dfe.request-verification": "github:DFE-Digital/login.dfe.request-verification#v1.0.0",
     "morgan": "^1.9.0",
-    "oidc-provider": "^2.4.0",
+    "oidc-provider": "github:DFE-Digital/node-oidc-provider",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "uuid": "^3.1.0",
