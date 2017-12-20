@@ -24,7 +24,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     return `/interaction/${ctx.oidc.uuid}`;
   },
   async interactionCheck(ctx) {
-    const client = await hotConfig.find(ctx.oidc.client.clientId);
+    const client = await hotConfig.find(ctx.oidc.client.clientId, ctx);
 
     logger.info('checking interaction');
     if (!ctx.oidc.session.interactionsCompleted) {

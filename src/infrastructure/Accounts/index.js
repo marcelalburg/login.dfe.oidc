@@ -4,14 +4,8 @@ const request = require('request-promise');
 const config = require('./../Config');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const HotConfigAdapter = require('./../HotConfig');
-const winston = require('winston');
-
-const logger = new (winston.Logger)({
-  colors: config.loggerSettings.colors,
-  transports: [
-    new (winston.transports.Console)({ level: 'info', colorize: true }),
-  ],
-});
+const uuid = require('uuid/v4');
+const logger = require('./../logger');
 
 class Account {
   constructor(user) {
@@ -34,8 +28,13 @@ class Account {
     try {
       const bearerToken = await jwtStrategy(config.accounts).getBearerToken();
       const hotConfig = new HotConfigAdapter();
-      const client = await hotConfig.find(ctx.oidc.client.clientId);
+      const client = await hotConfig.find(ctx.oidc.client.clientId, ctx);
       const userDirectoriesUrl = `${config.accounts.url}${client.params.directoryId}/user/${id}`;
+      let correlationId = uuid();
+
+      if (ctx && ctx.req && ctx.req.id) {
+        correlationId = ctx.req.id;
+      }
 
       logger.info(`calling directories api with: ${userDirectoriesUrl}`);
 
@@ -43,6 +42,9 @@ class Account {
         auth: { bearer: bearerToken },
         strictSSL: false,
         resolveWithFullResponse: true,
+        headers: {
+          'x-correlation-id': correlationId,
+        },
       });
       let returnValue = null;
       if (response.statusCode === 200) {
