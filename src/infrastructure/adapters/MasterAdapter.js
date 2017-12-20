@@ -91,8 +91,8 @@ class MasterAdapter {
    * @param {string} id Identifier of oidc-provider model
    *
    */
-  async find(id) {
-    return this.innerAdapter.find(id);
+  async find(id, ctx) {
+    return this.innerAdapter.find(id, ctx);
   }
 
   /**
