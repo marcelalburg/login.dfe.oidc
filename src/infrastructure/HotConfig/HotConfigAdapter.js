@@ -13,7 +13,7 @@ class HotConfigAdapter {
     return Promise.resolve({});
   }
 
-  async find(id) {
+  async find(id, ctx) {
     return Promise.resolve({});
   }
 

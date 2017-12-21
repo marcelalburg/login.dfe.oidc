@@ -5,6 +5,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const express = require('express');
+const setCorrelationId = require('express-mw-correlation-id');
 const config = require('./infrastructure/Config');
 const logger = require('./infrastructure/logger');
 const morgan = require('morgan');
@@ -23,6 +24,7 @@ if (config.hostingEnvironment.applicationInsights) {
 
 const app = express();
 
+app.use(setCorrelationId(true));
 app.set('logger', logger);
 app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
 app.use(morgan('dev'));
