@@ -3,6 +3,7 @@
 const HotConfigAdapter = require('./HotConfigAdapter');
 const request = require('request-promise');
 const config = require('./../Config');
+const logger = require('./../logger');
 const jwtStrategy = require('login.dfe.jwt-strategies');
 const uuid = require('uuid/v4');
 
@@ -15,6 +16,7 @@ class HotConfigApiAdapter extends HotConfigAdapter {
     }
 
     try {
+      logger.info(`Calling hot config api for request id ${correlationId}`);
       const response = await request.get(config.hotConfig.url, {
         auth: { bearer: bearerToken },
         strictSSL: false,
@@ -36,6 +38,7 @@ class HotConfigApiAdapter extends HotConfigAdapter {
       }
       return null;
     } catch (e) {
+      logger.error(`Failed call to hot config api for request id ${correlationId} error: ${e}`);
       return null;
     }
   }
