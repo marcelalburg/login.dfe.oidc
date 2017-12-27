@@ -1,6 +1,7 @@
 'use strict';
 
 // see previous example for the things that are not commented
+const appInsights = require('applicationinsights');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -12,7 +13,7 @@ const morgan = require('morgan');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
-const appInsights = require('applicationinsights');
+
 
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
 
