@@ -20,6 +20,9 @@ const postCompleteInteraction = async (req, res) => {
   if (req.body.status === 'failed') {
     interactions.render(res, 'loginerror', { reason: req.body.reason });
     return;
+  } else if (req.body.status === 'cancelled') {
+    oidc.interactionFinished(req, res, {});
+    return;
   }
 
   logger.info(`completing interaction for ${req.body.type}`);
