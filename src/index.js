@@ -13,6 +13,7 @@ const morgan = require('morgan');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
+const helmet = require('helmet');
 
 
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
@@ -24,6 +25,12 @@ if (config.hostingEnvironment.applicationInsights) {
 }
 
 const app = express();
+app.use(helmet({
+  noCache: true,
+  frameguard: {
+    action: 'deny',
+  },
+}));
 
 app.use(setCorrelationId(true));
 app.set('logger', logger);
