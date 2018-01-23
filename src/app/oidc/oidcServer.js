@@ -6,6 +6,7 @@ const Provider = require('oidc-provider');
 const Accounts = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
 const errorAction = require('./../error');
+const { attachEventListeners } = require('./eventListeners');
 
 const hotConfig = new HotConfig();
 
@@ -67,7 +68,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     discovery: true,
     encryption: true,
     introspection: true,
-    registration: true,
+    registration: false,
     request: true,
     requestUri: true,
     revocation: true,
@@ -75,5 +76,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     sessionManagement: true,
   },
 });
+
+attachEventListeners(oidc);
 
 module.exports = oidc;
