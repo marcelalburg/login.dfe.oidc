@@ -67,7 +67,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     discovery: true,
     encryption: true,
     introspection: true,
-    registration: true,
+    registration: false,
     request: true,
     requestUri: true,
     revocation: true,
