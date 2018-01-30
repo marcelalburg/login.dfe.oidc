@@ -2,13 +2,13 @@
 
 // see previous example for the things that are not commented
 const config = require('./infrastructure/Config');
+const logger = require('./infrastructure/logger');
 const appInsights = require('applicationinsights');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const express = require('express');
 const setCorrelationId = require('express-mw-correlation-id');
-const logger = require('./infrastructure/logger');
 const morgan = require('morgan');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
