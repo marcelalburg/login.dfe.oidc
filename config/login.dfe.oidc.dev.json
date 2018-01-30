@@ -1,17 +1,6 @@
 {
   "loggerSettings": {
-    "levels": {
-      "info": 0,
-      "ok": 1,
-      "error": 2
-    },
-    "colors": {
-      "info": "yellow",
-      "ok": "green",
-      "error": "red"
-    }
   },
-
   "requestVerification": {
     "isEnabled": false,
     "cert": "-----BEGIN CERTIFICATE-----\nMIIDIDCCAgigAwIBAgIJAMLTc+Ss7Y4XMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNV\nBAMTCWxvY2FsaG9zdDAeFw0xNzA5MjUxNDQyNTRaFw0yNzA5MjMxNDQyNTRaMBQx\nEjAQBgNVBAMTCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\nggEBAJ7cxOTYbY+vYG61JTZRFac+cbPNX+VYQTPWVRpJkvZMElkJe++kYsCiu/WP\nFBpIziN8K1HDQBudBn3VAuhR+xCZLmr60J0z8XwSKzq3F3iiBGeB/qLahg+A/gw4\nnfok/lwVorI29olNsnBQ6pDuN2+Zlj4bHQpbq7xkdmB2cnvaJUSwNqTRXLOM4CPs\nDoz08KgYkZ5FH7qIfZxYdWRvIans1WIvMPXlbSLe7Iosa5CQ9iJCL3ieO9hKWsCf\nICNFdRSZde5YJ6h+hwsfW8euE6GN+1vmkMdCFUF/2OQwM4zF1snhH7hOXl1DYtuF\n8dBAio8MveGoH8zY1tc98j/Id88CAwEAAaN1MHMwHQYDVR0OBBYEFNDsGSKqlls3\nxs3vfS0h0pwQ0ff1MEQGA1UdIwQ9MDuAFNDsGSKqlls3xs3vfS0h0pwQ0ff1oRik\nFjAUMRIwEAYDVQQDEwlsb2NhbGhvc3SCCQDC03PkrO2OFzAMBgNVHRMEBTADAQH/\nMA0GCSqGSIb3DQEBBQUAA4IBAQApOshQLBHTO05TktfVbNstBc9bYkXSjRPih2hx\nch7paC0IltxrvjAHDtEp2XfaVm9QHaeoR5puB3gTQiiG2C41eme+BY/WCsq/VPRs\neknAMHRFm0Et1fTj8n7fNvo7Nw7wzt3FV7a7QHA9Yomj09xOzsM29RgJR8McZtEg\nbvB4AedS6vt0tVzmXyEfI+4vf4cAZlyOKxMJDxhYSRH8YVlYyObam7AjLbNMRzTO\nrJKWMd9kLznhUOjk+JFYC4nLIacryi6ME0xmRJlQ1MOfsNs7AyZyJ94Xc4/naxAp\n2r968qnIz/hjA6Zrm657KA8sTwRoD2F73vD2cselK0C6RFaG\n-----END CERTIFICATE-----"
