@@ -3,11 +3,13 @@ jest.mock('./../../../src/infrastructure/Config', () => ({
     url: 'http://clients.local',
   },
 }));
+jest.mock('./../../../src/infrastructure/logger');
 jest.mock('login.dfe.jwt-strategies', () => () => ({
   async getBearerToken() {
     return Promise.resolve('super-secret-super-token');
   },
 }));
+jest.mock('login.dfe.audit.winston-sequelize-transport');
 jest.mock('request-promise');
 jest.mock('uuid/v4');
 
