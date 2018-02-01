@@ -14,6 +14,7 @@ const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
 const helmet = require('helmet');
+const healthCheck = require('login.dfe.healthcheck');
 
 
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
@@ -43,6 +44,7 @@ if (config.hostingEnvironment.useDevViews === true) {
 if (config.clientManagement.enabled) {
   app.use('/manage-client', clientManagement(oidc));
 }
+app.use('/healthcheck', healthCheck({ config }));
 
 oidc.initialize(app).then(() => {
   app.set('trust proxy', true);
