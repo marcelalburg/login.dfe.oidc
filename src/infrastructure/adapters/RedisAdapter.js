@@ -53,7 +53,10 @@ class RedisAdapter {
   constructor(name) {
     this.name = name;
     if (!redisClient && config) {
-      redisClient = new Redis(config.oidc.redisConnectionString);
+      const tls = config.oidc.redisConnectionString.includes("6380");
+
+      redisClient = new Redis(config.oidc.redisConnectionString, {tls: tls});
+
     }else{
 
     }
