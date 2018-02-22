@@ -70,4 +70,4 @@ ssl/**
 
 #config
 /config/
-!/config/login.dfe.directories.dev.json
+!/config/login.dfe.oidc.dev.json
