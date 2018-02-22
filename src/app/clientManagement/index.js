@@ -2,7 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const session = require('cookie-session');
 const config = require('./../../infrastructure/Config');
 const Redis = require('ioredis');
 
@@ -11,6 +11,15 @@ const init = (oidcProvider) => {
     throw new Error('Must provider oidcProvider');
   }
 
+  let expiryInMinutes = 30;
+  const sessionExpiry = parseInt(config.hostingEnvironment.sessionCookieExpiryInMinutes);
+  if (!isNaN(sessionExpiry)) {
+    expiryInMinutes = sessionExpiry;
+  }
+
+  const expiryDate = new Date(Date.now() + (60 * expiryInMinutes * 1000));
+
+
   const router = express.Router();
 
   router.use(bodyParser.urlencoded({ extended: true }));
@@ -18,6 +27,11 @@ const init = (oidcProvider) => {
     secret: config.clientManagement.sessionKey,
     saveUninitialized: false,
     resave: true,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      expires: expiryDate,
+    },
   }));
 
   const getClients = async () => new Promise((resolve, reject) => {
