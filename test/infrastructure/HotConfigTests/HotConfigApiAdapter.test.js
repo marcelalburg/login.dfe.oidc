@@ -3,7 +3,12 @@ jest.mock('./../../../src/infrastructure/Config', () => ({
     url: 'http://clients.local',
   },
 }));
-jest.mock('./../../../src/infrastructure/logger');
+jest.mock('./../../../src/infrastructure/logger', () => {
+  return {
+    info: jest.fn(),
+    error: jest.fn(),
+  };
+});
 jest.mock('login.dfe.jwt-strategies', () => () => ({
   async getBearerToken() {
     return Promise.resolve('super-secret-super-token');

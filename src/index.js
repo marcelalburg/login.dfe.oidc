@@ -3,7 +3,6 @@
 // see previous example for the things that are not commented
 const config = require('./infrastructure/Config');
 const logger = require('./infrastructure/logger');
-const appInsights = require('applicationinsights');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -21,9 +20,6 @@ const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.s
 
 validateConfigAndQuitOnError(oidcSchema, config, logger);
 
-if (config.hostingEnvironment.applicationInsights) {
-  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
-}
 
 const app = express();
 app.use(helmet({
