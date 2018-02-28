@@ -42,10 +42,13 @@ if (config.clientManagement.enabled) {
 }
 app.use('/healthcheck', healthCheck({ config }));
 
-oidc.initialize(app).then(() => {
+
+oidc.initialize(app).then((provider) => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
   app.set('views', path.resolve(__dirname, 'app'));
+  // eslint-disable-next-line no-param-reassign
+  provider.app.proxy = true;
 
   const isDev = config.hostingEnvironment.env === 'dev';
   const port = config.hostingEnvironment.port;

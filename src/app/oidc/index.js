@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const bodyParser = require('body-parser');
 const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
@@ -17,7 +18,7 @@ const initialize = (app) => {
   return oidc.initialize({
     keystore,
     adapter,
-  }).then(() => {
+  }).then((provider) => {
     app.proxy = true;
     app.keys = config.oidc.secureKey.split(',');
 
@@ -31,7 +32,10 @@ const initialize = (app) => {
     app.get('/:uuid/digipass', getDevDigipass);
 
     app.use(oidc.callback);
+    return provider;
   });
+
+
 };
 
 const clearClientCache = () => {
