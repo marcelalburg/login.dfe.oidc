@@ -10,11 +10,32 @@ const { attachEventListeners } = require('./eventListeners');
 
 const hotConfig = new HotConfig();
 
+let shortCookieExpiryInMinutes = 30;
+const shortCookieTimeOutInMinutes = parseInt(config.oidc.shortCookieTimeOutInMinutes);
+if (!isNaN(shortCookieTimeOutInMinutes)) {
+  shortCookieExpiryInMinutes = shortCookieTimeOutInMinutes;
+}
+const shortCookieExpiry = new Date(Date.now() + (60 * shortCookieExpiryInMinutes * 1000));
+
+let longCookieExpiryInMinutes = 60;
+const longCookieTimeOutInMinutes = parseInt(config.oidc.longCookieTimeOutInMinutes);
+if (!isNaN(shortCookieTimeOutInMinutes)) {
+  longCookieExpiryInMinutes = longCookieTimeOutInMinutes;
+}
+const longCookieExpiry = new Date(Date.now() + (60 * longCookieExpiryInMinutes * 1000));
+
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
   logoutSource: logoutAction,
   renderError: errorAction,
   findById: Accounts.findById,
+
+  cookies: {
+    long: {
+      httpOnly: true, secure: true, maxAge: longCookieExpiry },
+    short: {
+      httpOnly: true, secure: true, maxAge: shortCookieExpiry },
+  },
   claims: {
     // scope: [claims] format
     openid: ['sub'],
