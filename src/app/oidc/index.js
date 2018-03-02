@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
 const adapter = require('./../../infrastructure/adapters/MasterAdapter');
+const { asyncWrapper } = require('login.dfe.express-error-handling');
 
 const oidc = require('./oidcServer');
 const getInteraction = require('./getInteraction');
@@ -24,12 +25,12 @@ const initialize = (app) => {
 
     const parse = bodyParser.urlencoded({ extended: false });
 
-    app.get('/interaction/:grant', getInteraction);
-    app.post('/interaction/:grant/confirm', parse, getConfirmInteraction);
-    app.post('/interaction/:grant/complete', parse, postCompleteInteraction);
+    app.get('/interaction/:grant', asyncWrapper(getInteraction));
+    app.post('/interaction/:grant/confirm', parse, asyncWrapper(getConfirmInteraction));
+    app.post('/interaction/:grant/complete', parse, asyncWrapper(postCompleteInteraction));
 
-    app.get('/:uuid/usernamepassword', getDevUsernamePassword);
-    app.get('/:uuid/digipass', getDevDigipass);
+    app.get('/:uuid/usernamepassword', asyncWrapper(getDevUsernamePassword));
+    app.get('/:uuid/digipass', asyncWrapper(getDevDigipass));
 
     app.use(oidc.callback);
     return provider;
