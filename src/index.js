@@ -14,6 +14,7 @@ const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
 const helmet = require('helmet');
 const healthCheck = require('login.dfe.healthcheck');
+const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
 
 
 const { oidcSchema, validateConfigAndQuitOnError } = require('login.dfe.config.schema');
@@ -47,8 +48,17 @@ oidc.initialize(app).then((provider) => {
   app.set('trust proxy', true);
   app.set('view engine', 'ejs');
   app.set('views', path.resolve(__dirname, 'app'));
+
   // eslint-disable-next-line no-param-reassign
   provider.app.proxy = true;
+
+  const errorPageRenderer = ejsErrorPages.getErrorPageRenderer({
+    help: config.hostingEnvironment.helpUrl,
+  }, config.hostingEnvironment.env === 'dev');
+  app.use(getErrorHandler({
+    logger,
+    errorPageRenderer,
+  }));
 
   const isDev = config.hostingEnvironment.env === 'dev';
   const port = config.hostingEnvironment.port;
