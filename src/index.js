@@ -4,6 +4,7 @@
 const config = require('./infrastructure/Config');
 const logger = require('./infrastructure/logger');
 const fs = require('fs');
+const http = require('http');
 const https = require('https');
 const path = require('path');
 const express = require('express');
@@ -15,12 +16,25 @@ const oidc = require('./app/oidc');
 const helmet = require('helmet');
 const healthCheck = require('login.dfe.healthcheck');
 const { getErrorHandler, ejsErrorPages } = require('login.dfe.express-error-handling');
+const KeepAliveAgent = require('agentkeepalive');
 
 
 const { oidcSchema, validateConfig } = require('login.dfe.config.schema');
 
 validateConfig(oidcSchema, config, logger, config.hostingEnvironment.env !== 'dev');
 
+http.GlobalAgent = new KeepAliveAgent({
+  maxSockets: 10,
+  maxFreeSockets: 2,
+  timeout: 60000,
+  keepAliveTimeout: 300000,
+});
+https.GlobalAgent = new KeepAliveAgent({
+  maxSockets: 10,
+  maxFreeSockets: 2,
+  timeout: 60000,
+  keepAliveTimeout: 300000,
+});
 
 const app = express();
 app.use(helmet({
