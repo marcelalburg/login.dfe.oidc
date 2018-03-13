@@ -56,8 +56,14 @@ class Account {
       }
       return null;
     } catch (e) {
-      logger.warn(`user not found Id:${id} error: ${e}`);
-      return null;
+      if (e.statusCode === 404) {
+        logger.warn(`user not found Id:${id} error: ${e}`);
+        return null;
+      }
+
+      logger.error(`Error calling directories API ${e.message}`);
+
+      throw e;
     }
   }
 }
