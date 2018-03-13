@@ -3,7 +3,6 @@
 const request = require('request-promise');
 const config = require('./../Config');
 const jwtStrategy = require('login.dfe.jwt-strategies');
-const HotConfigAdapter = require('./../HotConfig');
 const uuid = require('uuid/v4');
 const logger = require('./../logger');
 
@@ -27,9 +26,7 @@ class Account {
   static async findById(ctx, id) {
     try {
       const bearerToken = await jwtStrategy(config.accounts).getBearerToken();
-      const hotConfig = new HotConfigAdapter();
-      const client = await hotConfig.find(ctx.oidc.client.clientId, ctx);
-      const userDirectoriesUrl = `${config.accounts.url}${client.params.directoryId}/user/${id}`;
+      const userDirectoriesUrl = `${config.accounts.url}users/${id}`;
       let correlationId = uuid();
 
       if (ctx && ctx.req && ctx.req.id) {
