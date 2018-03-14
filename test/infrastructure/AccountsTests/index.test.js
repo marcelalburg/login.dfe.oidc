@@ -24,7 +24,7 @@ jest.mock('login.dfe.jwt-strategies', () => () => ({
 }));
 jest.mock('./../../../src/infrastructure/HotConfig', () => jest.fn().mockImplementation(() => ({
   async find(id) {
-    return Promise.resolve({ params: { directoryId: '54321' } });
+    return Promise.resolve({ params: { } });
   },
 })));
 jest.mock('request-promise');
@@ -104,7 +104,7 @@ describe('When constructing the accounts', () => {
     it('then the client directory id is returned and added to the url', async () => {
       await Accounts.findById(ctx, 'test');
 
-      expect(requestGet.mock.calls[0][0]).toBe('http://directories.local/54321/user/test');
+      expect(requestGet.mock.calls[0][0]).toBe('http://directories.local/users/test');
     });
     it('then the correlation id is added to the headers', async () => {
       await Accounts.findById(ctx, 'test');

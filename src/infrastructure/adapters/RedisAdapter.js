@@ -22,12 +22,22 @@ const get = (key) => {
     }
   });
 };
-const set = (key, value) => {
+const set = (key, value, expires) => {
   return new Promise((resolve, reject) => {
     try {
-      redisClient.set(key, JSON.stringify(value)).then(() => {
-        resolve();
-      });
+
+      if(expires){
+
+        redisClient.set(key, JSON.stringify(value), 'EX', expires).then(() => {
+          resolve();
+        });
+      } else {
+        redisClient.set(key, JSON.stringify(value)).then(() => {
+          resolve();
+        });
+      }
+
+
     } catch (e) {
       redisClient.disconnect();
       reject(e);
@@ -57,7 +67,7 @@ class RedisAdapter {
 
       redisClient = new Redis(config.oidc.redisConnectionString, {tls: tls});
 
-    }else{
+    } else {
 
     }
   }
@@ -88,7 +98,7 @@ class RedisAdapter {
     console.info(`consume ${key}`);
     const item = await get(key);
     item.consumed = epochTime();
-    await set(key, item);
+    await set(key, item, undefined);
   }
 
   async find(id) {
@@ -111,7 +121,7 @@ class RedisAdapter {
       await set(grantKey, [key]);
     }
 
-    await set(key, payload); //, expiresIn * 1000);
+    await set(key, payload, expiresIn);
   }
 
   static connect(provider) { // eslint-disable-line no-unused-vars

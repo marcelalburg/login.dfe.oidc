@@ -15,14 +15,14 @@ const shortCookieTimeOutInMinutes = parseInt(config.oidc.shortCookieTimeOutInMin
 if (!isNaN(shortCookieTimeOutInMinutes)) {
   shortCookieExpiryInMinutes = shortCookieTimeOutInMinutes;
 }
-const shortCookieExpiry = new Date(Date.now() + (60 * shortCookieExpiryInMinutes * 1000));
+const shortCookieExpiry = (60000 * shortCookieExpiryInMinutes);
 
 let longCookieExpiryInMinutes = 60;
 const longCookieTimeOutInMinutes = parseInt(config.oidc.longCookieTimeOutInMinutes);
 if (!isNaN(shortCookieTimeOutInMinutes)) {
   longCookieExpiryInMinutes = longCookieTimeOutInMinutes;
 }
-const longCookieExpiry = new Date(Date.now() + (60 * longCookieExpiryInMinutes * 1000));
+const longCookieExpiry = (60000 * longCookieExpiryInMinutes);
 
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 60,
