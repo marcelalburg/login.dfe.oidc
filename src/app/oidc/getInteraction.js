@@ -1,15 +1,30 @@
 const oidc = require('./oidcServer');
 const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
+const HotConfig = require('./../../infrastructure/HotConfig');
+
+const hotConfig = new HotConfig();
 
 const getInteraction = async (req, res) => {
-  const details = await oidc.interactionDetails(req);
-  logger.info('see what else is available to you for interaction views', details);
+  try {
+    const details = await oidc.interactionDetails(req);
+    logger.info('see what else is available to you for interaction views', details);
 
-  if (details.interaction.type === 'digipass') {
-    res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
-  } else {
-    res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
+    if (details.interaction.type === 'digipass') {
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
+    }
+    return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
+  } catch (e) {
+    logger.error(`Unable to get interaction details - falling back to redirect uri - error ${e.message}`);
+  }
+  try {
+    const client = await hotConfig.find(req.params.clientId, req);
+
+    if (client && client.redirect_uris.indexOf(req.params.redirect_uri)) {
+      return res.redirect(req.params.redirect_uri);
+    }
+  } catch (e) {
+    throw e;
   }
 };
 
