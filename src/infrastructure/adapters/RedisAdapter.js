@@ -118,7 +118,7 @@ class RedisAdapter {
       if (grant) {
         grant.push(key);
       }
-      await set(grantKey, [key], expiresIn);
+      await set(grantKey, [key]);
     }
 
     await set(key, payload, expiresIn);
