@@ -27,7 +27,7 @@ const set = (key, value, expires) => {
     try {
 
       if(expires){
-        console.info('Set',key,value,expires);
+
         redisClient.set(key, JSON.stringify(value), 'EX', expires).then(() => {
           resolve();
         });
