@@ -3,6 +3,9 @@ const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
 const RequestVerification = require('login.dfe.request-verification');
 const interactions = require('./../interactions');
+const HotConfig = require('./../../infrastructure/HotConfig');
+
+const hotConfig = new HotConfig();
 
 const postCompleteInteraction = async (req, res) => {
   const contents = JSON.stringify({ uuid: req.params.grant, uid: req.body.uid });
@@ -26,20 +29,33 @@ const postCompleteInteraction = async (req, res) => {
   }
 
   logger.info(`completing interaction for ${req.body.type}`);
-  await oidc.interactionFinished(req, res, {
-    login: {
-      account: req.body.uid, // becomes token
-      acr: '1',
-      // remember: !!req.body.remember,
-      ts: Math.floor(Date.now() / 1000),
-    },
-    consent: {
-      // TODO: remove offline_access from scopes if remember is not checked
-    },
-    meta: {
-      interactionCompleted: req.body.type,
-    },
-  });
+  try {
+    await oidc.interactionFinished(req, res, {
+      login: {
+        account: req.body.uid, // becomes token
+        acr: '1',
+        // remember: !!req.body.remember,
+        ts: Math.floor(Date.now() / 1000),
+      },
+      consent: {
+        // TODO: remove offline_access from scopes if remember is not checked
+      },
+      meta: {
+        interactionCompleted: req.body.type,
+      },
+    });
+  } catch (e) {
+    logger.warn(`Possible interaction timeout, redirect to RP - ${e.message}`);
+  }
+  try {
+    const client = await hotConfig.find(req.body.clientId, req);
+
+    if (client && client.redirect_uris.indexOf(req.body.redirectUri !== -1)) {
+      res.redirect(req.body.redirectUri);
+    }
+  } catch (e) {
+    throw e;
+  }
 };
 
 module.exports = postCompleteInteraction;
