@@ -44,6 +44,7 @@ const postCompleteInteraction = async (req, res) => {
         interactionCompleted: req.body.type,
       },
     });
+    return;
   } catch (e) {
     logger.warn(`Possible interaction timeout, redirect to RP - ${e.message}`);
   }
