@@ -15,7 +15,7 @@ const getInteraction = async (req, res) => {
     }
     return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
   } catch (e) {
-    logger.error(`Unable to get interaction details - falling back to redirect uri - error ${e.message}`);
+    logger.warn(`Unable to get interaction details - falling back to redirect uri - error ${e.message}`);
   }
   try {
     const client = await hotConfig.find(req.params.clientId, req);
