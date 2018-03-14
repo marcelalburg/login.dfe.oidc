@@ -21,7 +21,7 @@ const getInteraction = async (req, res) => {
     const client = await hotConfig.find(req.params.clientId, req);
 
     if (client && client.redirect_uris.indexOf(req.params.redirect_uri)) {
-      return res.redirect(req.params.redirect_uri);
+      return res.redirect(`${req.params.redirect_uri}/?error=sessionexpired`);
     }
   } catch (e) {
     throw e;
