@@ -8,8 +8,8 @@ let redisClient;
 
 const grantKeyFor = (id) => {
   return `grant:${id}`;
+};
 
-}
 const get = (key) => {
   return new Promise((resolve, reject) => {
     try {
@@ -17,7 +17,6 @@ const get = (key) => {
         resolve(JSON.parse(result));
       });
     } catch (e) {
-      redisClient.disconnect();
       reject(e);
     }
   });
@@ -39,7 +38,6 @@ const set = (key, value, expires) => {
 
 
     } catch (e) {
-      redisClient.disconnect();
       reject(e);
     }
   });
@@ -51,7 +49,6 @@ const del = (key) => {
         resolve();
       });
     } catch (e) {
-      redisClient.disconnect();
       reject(e);
     }
   });

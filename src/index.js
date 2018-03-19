@@ -27,13 +27,13 @@ http.GlobalAgent = new KeepAliveAgent({
   maxSockets: 160,
   maxFreeSockets: 10,
   timeout: 60000,
-  keepAliveTimeout: 300000,
+  keepAliveTimeout: 30000,
 });
 https.GlobalAgent = new KeepAliveAgent({
   maxSockets: 160,
   maxFreeSockets: 10,
   timeout: 60000,
-  keepAliveTimeout: 300000,
+  keepAliveTimeout: 30000,
 });
 
 const app = express();

@@ -25,7 +25,7 @@ if (!isNaN(shortCookieTimeOutInMinutes)) {
 const longCookieExpiry = (60000 * longCookieExpiryInMinutes);
 
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
-  clientCacheDuration: 60,
+  clientCacheDuration: 300,
   logoutSource: logoutAction,
   renderError: errorAction,
   findById: Accounts.findById,
