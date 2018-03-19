@@ -3,6 +3,7 @@
 const Redis = require('ioredis');
 const epochTime = require('./../helpers/epoch_time');
 const config = require('./../Config');
+const logger = require('./../logger');
 
 let redisClient;
 
@@ -60,6 +61,7 @@ class RedisAdapter {
   constructor(name) {
     this.name = name;
     if (!redisClient && config) {
+      logger.warn('Creating new redis connection in OIDC');
       const tls = config.oidc.redisConnectionString.includes("6380");
 
       redisClient = new Redis(config.oidc.redisConnectionString, {tls: tls});
