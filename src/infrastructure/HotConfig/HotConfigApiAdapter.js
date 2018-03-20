@@ -1,7 +1,11 @@
 'use strict';
 
 const HotConfigAdapter = require('./HotConfigAdapter');
-const request = require('request-promise');
+const request = require('request-promise').defaults({
+  forever: true,
+  keepAlive: true,
+});
+
 const config = require('./../Config');
 const logger = require('./../logger');
 const jwtStrategy = require('login.dfe.jwt-strategies');
@@ -18,12 +22,12 @@ class HotConfigApiAdapter extends HotConfigAdapter {
     try {
       logger.info(`Calling hot config api for request id ${correlationId}`);
       const response = await request.get(config.hotConfig.url, {
-        auth: { bearer: bearerToken },
+        auth: {bearer: bearerToken},
         strictSSL: false,
         resolveWithFullResponse: true,
         headers: {
-          'x-correlation-id': correlationId,
-        },
+          'x-correlation-id': correlationId
+        }
       });
       let returnValue = null;
       if (response.statusCode === 200) {

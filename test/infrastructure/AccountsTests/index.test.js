@@ -31,7 +31,8 @@ jest.mock('request-promise');
 jest.mock('uuid/v4');
 
 
-const Accounts = require('./../../../src/infrastructure/Accounts');
+const request = require('request-promise');
+
 
 describe('When constructing the accounts', () => {
   let requestGet;
@@ -39,21 +40,26 @@ describe('When constructing the accounts', () => {
   let uuidStub;
   const correlationId = '2aea53ee-5413-470e-a35e-378a3375a6fe';
   const generatedId = '466effad-fc07-4d70-aca6-ca6f196bc673';
-
+  let Accounts;
   let ctx = { oidc: { client: { clientId: '1234' } }, req: { id: correlationId } };
 
+  beforeAll(() => {
+    requestGet = jest.fn();
+    request.defaults.mockReturnValue({
+      get: requestGet,
+    });
+  });
   beforeEach(() => {
-    requestGet = jest.fn().mockReturnValue({
+    requestGet.mockReset().mockReturnValue({
       statusCode: 200,
       body: '{"sub":"123456","name":"Test User", "given_name":"Test", "family_name":"User", "email":"test@test.com"}',
     });
-    const request = require('request-promise');
 
     uuidStub = jest.fn().mockReturnValue(generatedId);
     uuid = require('uuid/v4');
     uuid.mockImplementation(uuidStub);
 
-    request.get = requestGet;
+    Accounts = require('./../../../src/infrastructure/Accounts');
   });
 
   describe('and calling findby id', () => {
