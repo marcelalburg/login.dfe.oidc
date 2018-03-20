@@ -1,3 +1,9 @@
+jest.mock('./../../../src/infrastructure/Config', () => ({
+  oidc: {
+    redisConnectionString: 'http://clients.local',
+  },
+}));
+
 const MasterAdapter = require('./../../../src/infrastructure/adapters/MasterAdapter');
 const RedisAdapter = require('./../../../src/infrastructure/adapters/RedisAdapter');
 const HotConfigAdapter = require('./../../../src/infrastructure/HotConfig/HotConfigAdapter');
