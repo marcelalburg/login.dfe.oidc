@@ -24,16 +24,16 @@ const { oidcSchema, validateConfig } = require('login.dfe.config.schema');
 validateConfig(oidcSchema, config, logger, config.hostingEnvironment.env !== 'dev');
 
 http.GlobalAgent = new KeepAliveAgent({
-  maxSockets: 160,
-  maxFreeSockets: 10,
-  timeout: 60000,
-  keepAliveTimeout: 300000,
+  maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
+  maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
+  timeout: config.hostingEnvironment.agentKeepAlive.timeout,
+  keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
 });
 https.GlobalAgent = new KeepAliveAgent({
-  maxSockets: 160,
-  maxFreeSockets: 10,
-  timeout: 60000,
-  keepAliveTimeout: 300000,
+  maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
+  maxFreeSockets: config.hostingEnvironment.agentKeepAlive.maxFreeSockets,
+  timeout: config.hostingEnvironment.agentKeepAlive.timeout,
+  keepAliveTimeout: config.hostingEnvironment.agentKeepAlive.keepAliveTimeout,
 });
 
 const app = express();
