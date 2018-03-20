@@ -1,72 +1,19 @@
-/* eslint-disable */
-'use strict';
-const Redis = require('ioredis');
-const epochTime = require('./../helpers/epoch_time');
+const Redis = require('ioredis'); // eslint-disable-line import/no-unresolved
+const { isEmpty } = require('lodash');
 const config = require('./../Config');
 
-let redisClient;
+const tls = config.oidc.redisConnectionString.includes('6380');
 
-const grantKeyFor = (id) => {
+
+const client = new Redis(config.oidc.redisConnectionString, { tls, keyPrefix: 'oidc:' });
+
+function grantKeyFor(id) {
   return `grant:${id}`;
-};
-
-const get = (key) => {
-  return new Promise((resolve, reject) => {
-    try {
-      redisClient.get(key).then((result) => {
-        resolve(JSON.parse(result));
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-const set = (key, value, expires) => {
-  return new Promise((resolve, reject) => {
-    try {
-
-      if(expires){
-
-        redisClient.set(key, JSON.stringify(value), 'EX', expires).then(() => {
-          resolve();
-        });
-      } else {
-        redisClient.set(key, JSON.stringify(value)).then(() => {
-          resolve();
-        });
-      }
-
-
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-const del = (key) => {
-  return new Promise((resolve, reject) => {
-    try {
-      redisClient.del(key).then(() => {
-        resolve();
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
+}
 
 class RedisAdapter {
-
   constructor(name) {
     this.name = name;
-    if (!redisClient && config) {
-      const tls = config.oidc.redisConnectionString.includes("6380");
-
-      redisClient = new Redis(config.oidc.redisConnectionString, {tls: tls});
-
-    } else {
-
-    }
   }
 
   key(id) {
@@ -75,54 +22,51 @@ class RedisAdapter {
 
   async destroy(id) {
     const key = this.key(id);
-    console.info(`destroy ${key}`);
-    const x = await get(key);
-    const grantId = x && x.grantId;
-
-    await del(key);
-
-    if (grantId) {
-      const grantKey = grantKeyFor(grantId);
-      const grant = await get(grantKey);
-      for (let i = 0; i < grant.length; i++) {
-        await del(grant(i));
-      }
-    }
+    const grantId = await client.hget(key, 'grantId');
+    const tokens = await client.lrange(grantKeyFor(grantId), 0, -1);
+    const deletions = tokens.map(token => client.del(token));
+    deletions.push(client.del(key));
+    await deletions;
   }
 
-  async consume(id) {
-    const key = this.key(id);
-    console.info(`consume ${key}`);
-    const item = await get(key);
-    item.consumed = epochTime();
-    await set(key, item, undefined);
+  consume(id) {
+    return client.hset(this.key(id), 'consumed', Math.floor(Date.now() / 1000));
   }
 
   async find(id) {
-    const key = this.key(id);
-    console.info(`find ${key}`);
-    return await get(key);
+    const data = await client.hgetall(this.key(id));
+    if (isEmpty(data)) {
+      return undefined;
+    } else if (data.dump !== undefined) {
+      return JSON.parse(data.dump);
+    }
+    return data;
   }
 
-  async upsert(id, payload, expiresIn) {
+  upsert(id, payload, expiresIn) {
     const key = this.key(id);
-    console.info(`upsert ${key}`);
+    let toStore = payload;
 
-    const { grantId } = payload;
-    if (grantId) {
-      const grantKey = grantKeyFor(grantId);
-      const grant = await get(grantKey);
-      if (grant) {
-        grant.push(key);
-      }
-      await set(grantKey, [key]);
+    // Clients are not simple objects where value is always a string
+    // redis does only allow string values =>
+    // work around it to keep the adapter interface simple
+    if (this.name === 'Client' || this.name === 'Session') {
+      toStore = { dump: JSON.stringify(payload) };
     }
 
-    await set(key, payload, expiresIn);
-  }
+    const multi = client.multi();
+    multi.hmset(key, toStore);
 
-  static connect(provider) { // eslint-disable-line no-unused-vars
-    // noop
+    if (expiresIn) {
+      multi.expire(key, expiresIn);
+    }
+
+    if (toStore.grantId) {
+      const grantKey = grantKeyFor(toStore.grantId);
+      multi.rpush(grantKey, key);
+    }
+
+    return multi.exec();
   }
 }
 
