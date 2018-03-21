@@ -1,7 +1,6 @@
 'use strict';
 
 // eslint-disable-next-line no-unused-expressions
-require('winston-redis').Redis;
 const winston = require('winston');
 const config = require('./../Config');
 const WinstonSequelizeTransport = require('login.dfe.audit.winston-sequelize-transport');
