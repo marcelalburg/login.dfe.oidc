@@ -92,7 +92,7 @@ oidc.initialize(app).then((provider) => {
     });
   } else {
     app.listen(process.env.PORT, () => {
-      logger.info(`Dev server listening on http://localhost:${process.env.PORT}`);
+      logger.info(`Server listening on http://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`);
     });
   }
 })
