@@ -35,7 +35,7 @@ const setNextPing = () => {
     pingRedis(setNextPing);
   }, pingInterval);
 };
-setNextPing();
+//setNextPing();
 
 
 function grantKeyFor(id) {
