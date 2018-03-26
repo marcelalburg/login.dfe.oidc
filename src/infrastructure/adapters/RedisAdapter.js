@@ -5,7 +5,7 @@ const config = require('./../Config');
 const tls = config.oidc.redisConnectionString.includes('6380');
 
 
-const client = new Redis(config.oidc.redisConnectionString, { connectTimeout: 250, tls, keyPrefix: 'oidc:' });
+const client = new Redis(config.oidc.redisConnectionString, { connectTimeout: 1, tls, keyPrefix: 'oidc:' });
 
 
 let pingInterval = process.env.PING_INTERVAL;
