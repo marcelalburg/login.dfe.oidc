@@ -7,6 +7,37 @@ const tls = config.oidc.redisConnectionString.includes('6380');
 
 const client = new Redis(config.oidc.redisConnectionString, { tls, keyPrefix: 'oidc:' });
 
+
+let pingInterval = process.env.PING_INTERVAL;
+if (pingInterval) {
+  pingInterval = parseInt(pingInterval);
+}
+if (!pingInterval || isNaN(pingInterval)) {
+  pingInterval = 5000;
+}
+console.info(`Setting Redis ping interval to ${pingInterval}`);
+
+const pingRedis = (callback) => {
+  try {
+    client.ping((e) => {
+      if (e) {
+        console.error(`Ping error (cb) - ${e.message}`);
+      }
+      callback();
+    });
+  } catch (e) {
+    console.error(`Ping error (ct) - ${e.message}`);
+    callback();
+  }
+};
+const setNextPing = () => {
+  setTimeout(() => {
+    pingRedis(setNextPing);
+  }, pingInterval);
+};
+setNextPing();
+
+
 function grantKeyFor(id) {
   return `grant:${id}`;
 }
