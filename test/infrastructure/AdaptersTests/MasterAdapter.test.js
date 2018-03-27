@@ -2,6 +2,8 @@ jest.mock('./../../../src/infrastructure/Config', () => ({
   oidc: {
     redisConnectionString: 'http://clients.local',
   },
+  hostingEnvironment: {
+  },
 }));
 
 const MasterAdapter = require('./../../../src/infrastructure/adapters/MasterAdapter');
