@@ -49,7 +49,7 @@ if (config.hostingEnvironment.applicationInsights) {
   appInsights.setup(config.hostingEnvironment.applicationInsights).setAutoCollectConsole(false, false).start();
   loggerConfig.transports.push(new AppInsightsTransport({
     client: appInsights.defaultClient,
-    applicationName: 'OIDC',
+    applicationName: config.loggerSettings.applicationName || 'OIDC',
     type: 'event',
     treatErrorsAsExceptions: true,
   }));
