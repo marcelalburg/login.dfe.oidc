@@ -5,7 +5,7 @@ const winston = require('winston');
 const config = require('./../Config');
 const WinstonSequelizeTransport = require('login.dfe.audit.winston-sequelize-transport');
 const appInsights = require('applicationinsights');
-const WinstonApplicationInsights = require('winston-azure-application-insights').AzureApplicationInsightsLogger;
+const AppInsightsTransport = require('login.dfe.winston-appinsights');
 
 const logLevel = (config && config.loggerSettings && config.loggerSettings.logLevel) ? config.loggerSettings.logLevel : 'info';
 
@@ -41,13 +41,18 @@ if (config && config.loggerSettings && config.loggerSettings.redis && config.log
 
 const sequelizeTransport = WinstonSequelizeTransport(config);
 
-if(sequelizeTransport) {
+if (sequelizeTransport) {
   loggerConfig.transports.push(sequelizeTransport);
 }
 
 if (config.hostingEnvironment.applicationInsights) {
-  appInsights.setup(config.hostingEnvironment.applicationInsights).start();
-  loggerConfig.transports.push(new WinstonApplicationInsights({ client: appInsights.defaultClient }));
+  appInsights.setup(config.hostingEnvironment.applicationInsights).setAutoCollectConsole(false, false).start();
+  loggerConfig.transports.push(new AppInsightsTransport({
+    client: appInsights.defaultClient,
+    applicationName: 'OIDC',
+    type: 'event',
+    treatErrorsAsExceptions: true,
+  }));
 }
 
 const logger = new (winston.Logger)(loggerConfig);
