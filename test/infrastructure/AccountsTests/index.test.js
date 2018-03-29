@@ -5,7 +5,13 @@ jest.mock('./../../../src/infrastructure/logger', () => {
     error: jest.fn(),
   };
 });
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
 jest.mock('./../../../src/infrastructure/Config', () => ({
+  hostingEnvironment: {
+    agentKeepAlive: {},
+  },
   accounts: {
     url: 'http://directories.local/',
   },
