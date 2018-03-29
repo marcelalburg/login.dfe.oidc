@@ -1,8 +1,15 @@
+jest.mock('agentkeepalive', () => ({
+  HttpsAgent: jest.fn(),
+}));
 jest.mock('./../../../src/infrastructure/Config', () => ({
+  hostingEnvironment: {
+    agentKeepAlive: {},
+  },
   hotConfig: {
     url: 'http://clients.local',
   },
 }));
+
 jest.mock('./../../../src/infrastructure/logger', () => ({
   info: jest.fn(),
   error: jest.fn(),
