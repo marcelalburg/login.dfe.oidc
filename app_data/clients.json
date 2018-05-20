@@ -3,8 +3,9 @@
     "client_id": "self",
     "client_secret": "z3GDmGEF4VudHWf",
     "redirect_uris": [
-      "https://localhost:4430/dev/cb"
-    ]
+      "https://localhost:4430/"
+    ],
+    "params": {}
   },
   {
     "client_id": "foo",

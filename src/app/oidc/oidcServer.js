@@ -41,6 +41,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     openid: ['sub'],
     email: ['email'],
     profile: ['email', 'given_name', 'family_name'],
+    organisation: ['id', 'name', 'type', 'extra'],
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -66,6 +67,17 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
         error: 'login_required',
         reason: 'digipass_prompt',
         type: 'digipass',
+        uid: ctx.oidc.account.user.sub,
+      };
+    }
+
+    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
+      logger.info('will need to pick which Org this person belongs too. Time to do it..');
+      ctx.oidc.result = undefined;
+      return {
+        error: 'login_required',
+        reason: 'select_organisation',
+        type: 'select_organisation',
         uid: ctx.oidc.account.user.sub,
       };
     }

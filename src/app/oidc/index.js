@@ -10,6 +10,7 @@ const getInteraction = require('./getInteraction');
 const getConfirmInteraction = require('./getConfirmInteraction');
 const getDevUsernamePassword = require('./getDevUsernamePassword');
 const getDevDigipass = require('./getDevDigipass');
+const getDevChooseOrg = require('./getDevChooseOrg');
 const postCompleteInteraction = require('./postCompleteInteraction');
 
 const initialize = (app) => {
@@ -31,7 +32,7 @@ const initialize = (app) => {
 
     app.get('/:uuid/usernamepassword', asyncWrapper(getDevUsernamePassword));
     app.get('/:uuid/digipass', asyncWrapper(getDevDigipass));
-
+    app.get('/:uuid/select-organisation', asyncWrapper(getDevChooseOrg));
     app.use(oidc.callback);
     return provider;
   });
