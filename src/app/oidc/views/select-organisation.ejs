@@ -9,14 +9,14 @@
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="status" value="success" />
     <input type="hidden" name="type" value="select_organisation" />
-    <input type="hidden" name="org_id" value="1" />
+    <input type="hidden" name="organisation" value="<%= locals.org1 %>" />
     <button type="submit" name="uid" value="11d62132-6570-4e63-9dcb-137cc35e7543">Select Org A</button>
 </form>
 
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="status" value="success" />
     <input type="hidden" name="type" value="select_organisation" />
-    <input type="hidden" name="org_id" value="2" />
+    <input type="hidden" name="organisation" value="<%= locals.org2 %>" />
     <button type="submit" name="uid" value="11d62132-6570-4e63-9dcb-137cc35e7543">Select Org B</button>
 </form>
 
