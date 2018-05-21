@@ -5,13 +5,17 @@
     "redirect_uris": [
       "https://localhost:4430/"
     ],
-    "params": {}
+    "params": {"digipassRequired": true}
   },
   {
-    "client_id": "foo",
-    "client_secret": "bamr",
+    "client_id": "profiles",
+    "client_secret": "profiles",
     "redirect_uris": [
-      "https://localhost:1234/asdasd"
-    ]
+      "https://localhost:44311/auth/cb"
+    ],
+    "post_logout_redirect_uris": [
+      "https://localhost:44311/signout/complete"
+    ],
+    "params": {"digipassRequired": true}
   }
 ]

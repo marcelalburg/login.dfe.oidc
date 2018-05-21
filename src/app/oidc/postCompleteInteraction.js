@@ -8,7 +8,7 @@ const HotConfig = require('./../../infrastructure/HotConfig');
 const hotConfig = new HotConfig();
 
 const postCompleteInteraction = async (req, res) => {
-  const contents = JSON.stringify({ uuid: req.params.grant, uid: req.body.uid });
+  const contents = JSON.stringify({uuid: req.params.grant, uid: req.body.uid});
 
   if (config.requestVerification.isEnabled) {
     const requestVerification = new RequestVerification();
@@ -21,7 +21,7 @@ const postCompleteInteraction = async (req, res) => {
   }
 
   if (req.body.status === 'failed') {
-    interactions.render(res, 'loginerror', { reason: req.body.reason });
+    interactions.render(res, 'loginerror', {reason: req.body.reason});
     return;
   } else if (req.body.status === 'cancelled') {
     oidc.interactionFinished(req, res, {});
@@ -29,6 +29,13 @@ const postCompleteInteraction = async (req, res) => {
   }
 
   logger.info(`completing interaction for ${req.body.type}`);
+
+  const meta = {};
+
+  if (req.body.type === 'select_organisation') {
+    meta.orgId = req.body.org_id;
+  }
+
   try {
     await oidc.interactionFinished(req, res, {
       login: {
@@ -42,6 +49,7 @@ const postCompleteInteraction = async (req, res) => {
       },
       meta: {
         interactionCompleted: req.body.type,
+        ...meta,
       },
     });
     return;

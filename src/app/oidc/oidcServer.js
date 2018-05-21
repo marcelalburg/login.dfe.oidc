@@ -28,20 +28,29 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   clientCacheDuration: 300,
   logoutSource: logoutAction,
   renderError: errorAction,
-  findById: Accounts.findById,
+  findById: async (ctx, id, token) => {
+    const claims = {};
+    if (token) {
+      claims.organisation_id = token.claims.orgId;
+      return await Accounts.findById(ctx, id, claims);
+    }
 
+    return await Accounts.findById(ctx, id);
+  },
   cookies: {
     long: {
-      httpOnly: true, secure: true, maxAge: longCookieExpiry },
+      httpOnly: true, secure: true, maxAge: longCookieExpiry,
+    },
     short: {
-      httpOnly: true, secure: true, maxAge: shortCookieExpiry },
+      httpOnly: true, secure: true, maxAge: shortCookieExpiry,
+    },
   },
   claims: {
     // scope: [claims] format
     openid: ['sub'],
     email: ['email'],
     profile: ['email', 'given_name', 'family_name'],
-    organisation: ['id', 'name', 'type', 'extra'],
+    organisation: ['organisation_id', 'organisation_name', 'type', 'extra'],
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -57,6 +66,12 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     if (ctx.oidc.result && ctx.oidc.result.meta && ctx.oidc.result.meta.interactionCompleted) {
       logger.info(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
       ctx.oidc.session.interactionsCompleted.push(ctx.oidc.result.meta.interactionCompleted);
+
+      if (ctx.oidc.result.meta.interactionCompleted === 'select_organisation') {
+        ctx.oidc.claims = { orgId: ctx.oidc.result.meta.orgId };
+        ctx.oidc.session.orgId = ctx.oidc.result.meta.orgId;
+      }
+
       await ctx.oidc.session.save();
     }
 
@@ -71,7 +86,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
-    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
+    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select_organisation')) {
       logger.info('will need to pick which Org this person belongs too. Time to do it..');
       ctx.oidc.result = undefined;
       return {

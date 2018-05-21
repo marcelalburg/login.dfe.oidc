@@ -14,7 +14,7 @@ const getInteraction = async (req, res) => {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
     }
     if (details.interaction.type === 'select_organisation') {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/choose-organisation?uid=${details.interaction.uid}`);
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
     }
 
     return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
