@@ -31,7 +31,7 @@ const postCompleteInteraction = async (req, res) => {
   logger.info(`completing interaction for ${req.body.type}`);
 
   const meta = {};
-  if (req.body.type === 'select_organisation') {
+  if (req.body.type === 'select-organisation') {
     meta.organisation = JSON.parse(req.body.organisation);
   }
 

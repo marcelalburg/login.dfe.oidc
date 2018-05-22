@@ -68,7 +68,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       logger.info(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
       ctx.oidc.session.interactionsCompleted.push(ctx.oidc.result.meta.interactionCompleted);
 
-      if (ctx.oidc.result.meta.interactionCompleted === 'select_organisation') {
+      if (ctx.oidc.result.meta.interactionCompleted === 'select-organisation') {
         ctx.oidc.session.extraClaims.organisation = ctx.oidc.result.meta.organisation;
       }
 
@@ -86,13 +86,13 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
-    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select_organisation')) {
+    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
       logger.info('will need to pick which Org this person belongs too. Time to do it..');
       ctx.oidc.result = undefined;
       return {
         error: 'login_required',
-        reason: 'select_organisation',
-        type: 'select_organisation',
+        reason: 'select-organisation',
+        type: 'select-organisation',
         uid: ctx.oidc.account.user.sub,
       };
     }

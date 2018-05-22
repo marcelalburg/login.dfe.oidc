@@ -8,14 +8,14 @@
 <h1>iayaaaa</h1>
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="status" value="success" />
-    <input type="hidden" name="type" value="select_organisation" />
+    <input type="hidden" name="type" value="select-organisation" />
     <input type="hidden" name="organisation" value="<%= locals.org1 %>" />
     <button type="submit" name="uid" value="11d62132-6570-4e63-9dcb-137cc35e7543">Select Org A</button>
 </form>
 
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="status" value="success" />
-    <input type="hidden" name="type" value="select_organisation" />
+    <input type="hidden" name="type" value="select-organisation" />
     <input type="hidden" name="organisation" value="<%= locals.org2 %>" />
     <button type="submit" name="uid" value="11d62132-6570-4e63-9dcb-137cc35e7543">Select Org B</button>
 </form>
@@ -23,7 +23,7 @@
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="uuid" value="<%=uuid%>" />
     <input type="hidden" name="status" value="failed" />
-    <input type="hidden" name="type" value="select_organisation" />
+    <input type="hidden" name="type" value="select-organisation" />
     <input type="hidden" name="reason" value="Invalid client id" />
     <button type="submit">Return failure</button>
 </form>
@@ -31,7 +31,7 @@
 <form method="post" action="/interaction/<%= uuid %>/complete">
     <input type="hidden" name="uuid" value="<%=uuid%>" />
     <input type="hidden" name="status" value="cancelled" />
-    <input type="hidden" name="type" value="select_organisation" />
+    <input type="hidden" name="type" value="select-organisation" />
     <button type="submit">Cancel</button>
 </form>
 
