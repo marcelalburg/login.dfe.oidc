@@ -3,7 +3,7 @@ const config = require('./../../infrastructure/Config');
 const HotConfig = require('./../../infrastructure/HotConfig');
 const logger = require('./../../infrastructure/logger');
 const Provider = require('oidc-provider');
-const Accounts = require('./../../infrastructure/Accounts');
+const Account = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
 const errorAction = require('./../error');
 const { attachEventListeners } = require('./eventListeners');
@@ -28,19 +28,27 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   clientCacheDuration: 300,
   logoutSource: logoutAction,
   renderError: errorAction,
-  findById: Accounts.findById,
+  findById: async (ctx, id, token) => {
+    if (token) {
+      return Account.findById(ctx, id, token.claims);
+    }
 
+    return new Account(id);
+  },
   cookies: {
     long: {
-      httpOnly: true, secure: true, maxAge: longCookieExpiry },
+      httpOnly: true, secure: true, maxAge: longCookieExpiry,
+    },
     short: {
-      httpOnly: true, secure: true, maxAge: shortCookieExpiry },
+      httpOnly: true, secure: true, maxAge: shortCookieExpiry,
+    },
   },
   claims: {
     // scope: [claims] format
     openid: ['sub'],
     email: ['email'],
-    profile: ['email', 'given_name', 'family_name'],
+    profile: ['given_name', 'family_name'],
+    organisation: { organisation: null },
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -52,10 +60,18 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     if (!ctx.oidc.session.interactionsCompleted) {
       ctx.oidc.session.interactionsCompleted = [];
     }
+    if (!ctx.oidc.session.extraClaims) {
+      ctx.oidc.session.extraClaims = {};
+    }
 
     if (ctx.oidc.result && ctx.oidc.result.meta && ctx.oidc.result.meta.interactionCompleted) {
       logger.info(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
       ctx.oidc.session.interactionsCompleted.push(ctx.oidc.result.meta.interactionCompleted);
+
+      if (ctx.oidc.result.meta.interactionCompleted === 'select-organisation') {
+        ctx.oidc.session.extraClaims.organisation = ctx.oidc.result.meta.organisation;
+      }
+
       await ctx.oidc.session.save();
     }
 
@@ -70,6 +86,17 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
+    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
+      logger.info('will need to pick which Org this person belongs too. Time to do it..');
+      ctx.oidc.result = undefined;
+      return {
+        error: 'login_required',
+        reason: 'select-organisation',
+        type: 'select-organisation',
+        uid: ctx.oidc.account.user.sub,
+      };
+    }
+
     logger.info('completed all interactions');
     if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
       logger.info(`adding ${ctx.oidc.client.clientId} to authorized clients`);
@@ -78,6 +105,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       await ctx.oidc.session.save();
     }
 
+    ctx.oidc.claims = ctx.oidc.session.extraClaims;
     return false;
   },
   // TODO deployment configuration

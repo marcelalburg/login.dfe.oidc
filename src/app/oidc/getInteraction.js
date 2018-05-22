@@ -13,6 +13,10 @@ const getInteraction = async (req, res) => {
     if (details.interaction.type === 'digipass') {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
     }
+    if (details.interaction.type === 'select-organisation') {
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
+    }
+
     return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
   } catch (e) {
     logger.warn(`Unable to get interaction details - falling back to redirect uri - error ${e.message}`);

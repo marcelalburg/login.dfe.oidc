@@ -16,9 +16,10 @@ const uuid = require('uuid/v4');
 const logger = require('./../logger');
 
 class Account {
-  constructor(user) {
+  constructor(user, claims) {
     this.accountId = user.sub;
     this.user = user;
+    this.extraClaims = claims;
   }
   claims() {
     return {
@@ -29,10 +30,11 @@ class Account {
       middle_name: this.user.middle_name,
       nickname: this.user.nickname,
       email: this.user.email,
+      ...(this.extraClaims),
     };
   }
 
-  static async findById(ctx, id) {
+  static async findById(ctx, id, claims = {}) {
     try {
       const bearerToken = await jwtStrategy(config.accounts).getBearerToken();
       const userDirectoriesUrl = `${config.accounts.url}users/${id}`;
@@ -61,6 +63,9 @@ class Account {
         const user = JSON.parse(response.body);
         logger.info(`user returned : ${user}`);
         returnValue = user === undefined ? null : user;
+        if (claims) {
+          return new Account(returnValue, claims);
+        }
         return new Account(returnValue);
       }
       return null;
