@@ -32,7 +32,7 @@ const postCompleteInteraction = async (req, res) => {
 
   const meta = {};
   if (req.body.type === 'select-organisation') {
-    meta.organisation = JSON.parse(req.body.organisation);
+    meta.organisation = JSON.parse(decodeURIComponent(req.body.organisation));
   }
 
   try {
