@@ -1,4 +1,5 @@
 'use strict';
+
 const config = require('./../Config');
 const KeepAliveAgent = require('agentkeepalive').HttpsAgent;
 
@@ -21,6 +22,7 @@ class Account {
     this.user = user;
     this.extraClaims = claims;
   }
+
   claims() {
     return {
       sub: this.accountId,
@@ -32,6 +34,10 @@ class Account {
       email: this.user.email,
       ...(this.extraClaims),
     };
+  }
+
+  static withId(id) {
+    return new Account({ sub: id, id });
   }
 
   static async findById(ctx, id, claims = {}) {

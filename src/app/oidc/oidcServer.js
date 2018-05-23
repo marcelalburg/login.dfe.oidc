@@ -33,7 +33,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       return Account.findById(ctx, id, token.claims);
     }
 
-    return new Account(id);
+    return Account.withId(id);
   },
   cookies: {
     long: {
