@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const uuid = require('uuid/v4');
 const config = require('./../../infrastructure/Config');
 const HotConfig = require('./../../infrastructure/HotConfig');
@@ -6,7 +7,7 @@ const Provider = require('oidc-provider');
 const Account = require('./../../infrastructure/Accounts');
 const logoutAction = require('./../logout');
 const errorAction = require('./../error');
-const { attachEventListeners } = require('./eventListeners');
+const {attachEventListeners} = require('./eventListeners');
 
 const hotConfig = new HotConfig();
 
@@ -37,18 +38,18 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   },
   cookies: {
     long: {
-      httpOnly: true, secure: true, maxAge: longCookieExpiry,
+      httpOnly: true, secure: true, maxAge: longCookieExpiry
     },
     short: {
-      httpOnly: true, secure: true, maxAge: shortCookieExpiry,
-    },
+      httpOnly: true, secure: true, maxAge: shortCookieExpiry
+    }
   },
   claims: {
     // scope: [claims] format
     openid: ['sub'],
     email: ['email'],
     profile: ['given_name', 'family_name'],
-    organisation: { organisation: null },
+    organisation: {organisation: null}
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -78,22 +79,24 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     if (client.params.digipassRequired && !ctx.oidc.session.interactionsCompleted.find(x => x === 'digipass')) {
       logger.info('No digipass completed. Time to do it.');
       ctx.oidc.result = undefined;
+      ctx.oidc.ctx._matchedRouteName = 'authorization';
       return {
         error: 'login_required',
         reason: 'digipass_prompt',
         type: 'digipass',
-        uid: ctx.oidc.account.user.sub,
+        uid: ctx.oidc.account.user.sub
       };
     }
 
     if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
       logger.info('will need to pick which Org this person belongs too. Time to do it..');
       ctx.oidc.result = undefined;
+      ctx.oidc.ctx._matchedRouteName = 'authorization';
       return {
         error: 'login_required',
         reason: 'select-organisation',
         type: 'select-organisation',
-        uid: ctx.oidc.account.user.sub,
+        uid: ctx.oidc.account.user.sub
       };
     }
 
@@ -122,8 +125,8 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     requestUri: true,
     revocation: true,
     rejectUnauthorized: false,
-    sessionManagement: true,
-  },
+    sessionManagement: true
+  }
 });
 
 attachEventListeners(oidc);
