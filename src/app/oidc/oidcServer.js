@@ -34,6 +34,11 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       return Account.findById(ctx, id, token.claims);
     }
 
+    const meta = ctx.oidc.session.metaFor(ctx.oidc.params.client_id);
+    if (meta) {
+      return Account.findById(ctx, id, meta);
+    }
+
     return Account.withId(id);
   },
   cookies: {
