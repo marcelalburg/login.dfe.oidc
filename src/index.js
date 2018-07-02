@@ -9,7 +9,6 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const setCorrelationId = require('express-mw-correlation-id');
-const morgan = require('morgan');
 const developmentViews = require('./app/dev');
 const clientManagement = require('./app/clientManagement');
 const oidc = require('./app/oidc');
@@ -46,8 +45,6 @@ app.use(helmet({
 
 app.use(setCorrelationId(true));
 app.set('logger', logger);
-app.use(morgan('combined', { stream: fs.createWriteStream('./access.log', { flags: 'a' }) }));
-app.use(morgan('dev'));
 
 if (config.hostingEnvironment.useDevViews === true) {
   app.use(developmentViews);
