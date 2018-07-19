@@ -93,6 +93,18 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
+    if (client.params.smsRequired && !ctx.oidc.session.interactionsCompleted.find(x => x === 'sms')) {
+      logger.info('No sms completed. Time to do it.');
+      ctx.oidc.result = undefined;
+      ctx.oidc.ctx._matchedRouteName = 'authorization';
+      return {
+        error: 'login_required',
+        reason: 'sms_prompt',
+        type: 'sms',
+        uid: ctx.oidc.account.user.sub,
+      };
+    }
+
     if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
       logger.info('will need to pick which Org this person belongs too. Time to do it..');
       ctx.oidc.result = undefined;
