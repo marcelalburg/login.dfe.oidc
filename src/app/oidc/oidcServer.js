@@ -122,8 +122,9 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       logger.info(`adding ${ctx.oidc.client.clientId} to authorized clients`);
       const sid = uuid();
       ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
-      await ctx.oidc.session.save();
     }
+    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation');
+    await ctx.oidc.session.save();
 
     ctx.oidc.claims = ctx.oidc.session.extraClaims;
     return false;
