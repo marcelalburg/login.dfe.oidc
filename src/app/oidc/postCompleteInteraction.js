@@ -59,7 +59,7 @@ const postCompleteInteraction = async (req, res) => {
     const client = await hotConfig.find(req.body.clientId, req);
 
     if (client && client.redirect_uris.indexOf(req.body.redirectUri !== -1)) {
-      res.redirect(`${req.body.redirectUri}/?error=sessionexpired`);
+      res.redirect(`${req.body.redirectUri}?error=sessionexpired`);
     }
   } catch (e) {
     throw e;
