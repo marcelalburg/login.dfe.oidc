@@ -4,14 +4,20 @@ const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
 const adapter = require('./../../infrastructure/adapters/MasterAdapter');
 const { asyncWrapper } = require('login.dfe.express-error-handling');
+const apiAuth = require('login.dfe.api.auth');
 
 const oidc = require('./oidcServer');
 const getInteraction = require('./getInteraction');
+const getInteractionById = require('./getInteractionById');
 const getConfirmInteraction = require('./getConfirmInteraction');
 const getDevUsernamePassword = require('./getDevUsernamePassword');
 const getDevDigipass = require('./getDevDigipass');
 const getDevSelectOrg = require('./getDevSelectOrg');
 const postCompleteInteraction = require('./postCompleteInteraction');
+
+const noopMiddleware = (req, res, next) => {
+  next();
+};
 
 const initialize = (app) => {
   logger.info('initializing oidc');
@@ -25,7 +31,9 @@ const initialize = (app) => {
     app.keys = config.oidc.secureKey.split(',');
 
     const parse = bodyParser.urlencoded({ extended: false });
+    const auth = config.hostingEnvironment.env === "dev" ? noopMiddleware : apiAuth(app, config.api);
 
+    app.get('/interaction/:grant/check', auth, asyncWrapper(getInteractionById));
     app.get('/interaction/:grant', asyncWrapper(getInteraction));
     app.post('/interaction/:grant/confirm', parse, asyncWrapper(getConfirmInteraction));
     app.post('/interaction/:grant/complete', parse, asyncWrapper(postCompleteInteraction));
