@@ -7,6 +7,7 @@ const { asyncWrapper } = require('login.dfe.express-error-handling');
 
 const oidc = require('./oidcServer');
 const getInteraction = require('./getInteraction');
+const getInteractionById = require('./getInteractionById');
 const getConfirmInteraction = require('./getConfirmInteraction');
 const getDevUsernamePassword = require('./getDevUsernamePassword');
 const getDevDigipass = require('./getDevDigipass');
@@ -26,6 +27,7 @@ const initialize = (app) => {
 
     const parse = bodyParser.urlencoded({ extended: false });
 
+    app.get('/interaction/:grant/check', asyncWrapper(getInteractionById));
     app.get('/interaction/:grant', asyncWrapper(getInteraction));
     app.post('/interaction/:grant/confirm', parse, asyncWrapper(getConfirmInteraction));
     app.post('/interaction/:grant/complete', parse, asyncWrapper(postCompleteInteraction));
