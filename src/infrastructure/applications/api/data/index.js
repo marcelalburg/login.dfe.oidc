@@ -1,4 +1,4 @@
-const { omit, isUndefined } = require('lodash');
+const { omitBy,isNull, isUndefined } = require('lodash');
 
 const mapEntity = async (entity) => {
   if (!entity) {
@@ -16,7 +16,7 @@ const mapEntity = async (entity) => {
     });
   }
 
-  const response = {
+  let response = {
     friendlyName: entity.name,
     client_id: entity.relyingParty.client_id,
     token_endpoint_auth_method: entity.relyingParty.token_endpoint_auth_method,
@@ -30,7 +30,9 @@ const mapEntity = async (entity) => {
     params,
     postResetUrl: entity.relyingParty.postResetUrl,
   };
-  Object.keys(response).forEach(key => response[key] === undefined && delete response[key]);
+
+  response = omitBy(response, isNull);
+  response = omitBy(response, isUndefined);
   return response;
 };
 
