@@ -1,8 +1,7 @@
 /* eslint-disable */
 'use strict';
 
-class HotConfigAdapter {
-
+class ApplicationsAdapter {
 
   constructor(name) {
     this.name = name;
@@ -32,4 +31,4 @@ class HotConfigAdapter {
   }
 }
 
-module.exports = HotConfigAdapter;
+module.exports = ApplicationsAdapter;

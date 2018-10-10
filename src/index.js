@@ -21,7 +21,7 @@ const KeepAliveAgent = require('agentkeepalive');
 
 const { oidcSchema, validateConfig } = require('login.dfe.config.schema');
 
-validateConfig(oidcSchema, config, logger, config.hostingEnvironment.env !== 'dev');
+validateConfig(oidcSchema, config, logger, true);
 
 http.GlobalAgent = new KeepAliveAgent({
   maxSockets: config.hostingEnvironment.agentKeepAlive.maxSockets,
