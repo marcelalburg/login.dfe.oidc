@@ -3,9 +3,8 @@ const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
 const RequestVerification = require('login.dfe.request-verification');
 const interactions = require('./../interactions');
-const HotConfig = require('./../../infrastructure/HotConfig');
+const applicationsApi = require('./../../infrastructure/applications/api');
 
-const hotConfig = new HotConfig();
 
 const postCompleteInteraction = async (req, res) => {
   const contents = JSON.stringify({uuid: req.params.grant, uid: req.body.uid});
@@ -56,7 +55,7 @@ const postCompleteInteraction = async (req, res) => {
     logger.warn(`Possible interaction timeout, redirect to RP - ${e.message}`);
   }
   try {
-    const client = await hotConfig.find(req.body.clientId, req);
+    const client = await applicationsApi.getOidcModelById(req.body.clientId, req);
 
     if (client && client.redirect_uris.indexOf(req.body.redirectUri !== -1)) {
       res.redirect(`${req.body.redirectUri}?error=sessionexpired`);

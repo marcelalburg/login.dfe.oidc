@@ -2,12 +2,12 @@
 'use strict';
 const genericAdapter = require('./GenericAdapter');
 
-const hotConfigAdapter = require('./../HotConfig');
+const applicationsAdapter = require('../applications/ApplicationsApiAdapter');
 const RedisAdapter = require('./RedisAdapter');
 
 
 const adapterMapping = [
-  { name: 'Client', adapter: new hotConfigAdapter('Client') },
+  { name: 'Client', adapter: new applicationsAdapter('Client') },
 ];
 
 class MasterAdapter {

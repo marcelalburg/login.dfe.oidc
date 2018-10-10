@@ -28,7 +28,7 @@ jest.mock('login.dfe.jwt-strategies', () => () => ({
     return Promise.resolve('super-secret-super-token');
   },
 }));
-jest.mock('./../../../src/infrastructure/HotConfig', () => jest.fn().mockImplementation(() => ({
+jest.mock('./../../../src/infrastructure/applications/ApplicationsApiAdapter', () => jest.fn().mockImplementation(() => ({
   async find(id) {
     return Promise.resolve({ params: { } });
   },

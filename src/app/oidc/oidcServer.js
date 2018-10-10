@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const uuid = require('uuid/v4');
 const config = require('./../../infrastructure/Config');
-const HotConfig = require('./../../infrastructure/HotConfig');
+const applicationsApi = require('./../../infrastructure/applications/api');
 const logger = require('./../../infrastructure/logger');
 const Provider = require('oidc-provider');
 const Account = require('./../../infrastructure/Accounts');
@@ -9,7 +9,6 @@ const logoutAction = require('./../logout');
 const errorAction = require('./../error');
 const { attachEventListeners } = require('./eventListeners');
 
-const hotConfig = new HotConfig();
 
 let shortCookieExpiryInMinutes = 30;
 const shortCookieTimeOutInMinutes = parseInt(config.oidc.shortCookieTimeOutInMinutes);
@@ -48,6 +47,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     short: {
       httpOnly: true, secure: true, maxAge: shortCookieExpiry,
     },
+    keys: config.oidc.secureKey.split(','),
   },
   claims: {
     // scope: [claims] format
@@ -60,7 +60,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     return `/interaction/${ctx.oidc.uuid}`;
   },
   async interactionCheck(ctx) {
-    const client = await hotConfig.find(ctx.oidc.client.clientId, ctx);
+    const client = await applicationsApi.getOidcModelById(ctx.oidc.client.clientId);
 
     logger.info('checking interaction');
     if (!ctx.oidc.session.interactionsCompleted) {
