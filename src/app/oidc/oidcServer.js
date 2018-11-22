@@ -28,6 +28,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   clientCacheDuration: 300,
   logoutSource: logoutAction,
   renderError: errorAction,
+  formats: { default: 'opaque', ClientCredentials: 'jwt' },
   findById: async (ctx, id, token) => {
     if (token) {
       return Account.findById(ctx, id, token.claims);
@@ -143,7 +144,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     requestUri: true,
     revocation: true,
     rejectUnauthorized: false,
-    sessionManagement: true,
+    sessionManagement: true
   },
 });
 
