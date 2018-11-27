@@ -3,7 +3,6 @@ const config = require('./../../infrastructure/Config');
 const logger = require('./../../infrastructure/logger');
 const applicationsApi = require('./../../infrastructure/applications/api');
 
-
 const getInteraction = async (req, res) => {
   try {
     const details = await oidc.interactionDetails(req);
@@ -17,6 +16,14 @@ const getInteraction = async (req, res) => {
     }
     if (details.interaction.type === 'select-organisation') {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
+    }
+    if (details.interaction.error === 'consent_required') {
+      return await oidc.interactionFinished(req, res, {
+        login: {
+          account: details.accountId,
+        },
+        consent: {},
+      });
     }
 
     return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
