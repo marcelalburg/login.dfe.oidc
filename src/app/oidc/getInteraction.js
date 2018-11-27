@@ -17,20 +17,16 @@ const getInteraction = async (req, res) => {
     if (details.interaction.type === 'select-organisation') {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
     }
-    if (details.accountId && typeof details.accountId !== 'function') {
-      try {
-        await oidc.interactionFinished(req, res, {
-          login: {
-            account: details.accountId,
-          },
-          consent: {},
-        });
-      } catch (e) {
-        logger.warn(`Possible interaction timeout, redirect to RP - ${e.message}`);
-      }
-    } else {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
+    if (details.interaction.error === 'consent_required') {
+      return await oidc.interactionFinished(req, res, {
+        login: {
+          account: details.accountId,
+        },
+        consent: {},
+      });
     }
+
+    return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
   } catch (e) {
     logger.warn(`Unable to get interaction details - falling back to redirect uri - error ${e.message}`);
   }
