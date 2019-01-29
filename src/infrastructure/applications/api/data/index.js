@@ -9,7 +9,7 @@ const mapEntity = async (entity) => {
   if (entity.relyingParty.params) {
     Object.keys(entity.relyingParty.params).forEach((key) => {
       let value = entity.relyingParty.params[key];
-      if (key === 'digipassRequired' || key === 'supportsUsernameLogin') {
+      if (key === 'digipassRequired' || key === 'supportsUsernameLogin' || key === 'requiresGiasLockoutCheck') {
         value = value === '1' || value.toLowerCase() === 'true';
       }
       params[key] = value;

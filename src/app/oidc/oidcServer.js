@@ -117,13 +117,26 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
+    if (client.params.requiresGiasLockoutCheck && !ctx.oidc.session.interactionsCompleted.find(x => x === 'gias-lockout-check')) {
+      logger.info('No GIAS lockout check completed. Time to do it.');
+      ctx.oidc.result = undefined;
+      ctx.oidc.ctx._matchedRouteName = 'authorization';
+      return {
+        error: 'login_required',
+        reason: 'gias_lockout_check_prompt',
+        type: 'gias-lockout-check',
+        uid: ctx.oidc.account.user.sub,
+        oid: ctx.oidc.session.extraClaims.organisation.id,
+      };
+    }
+
     logger.info('completed all interactions');
     if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
       logger.info(`adding ${ctx.oidc.client.clientId} to authorized clients`);
       const sid = uuid();
       ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
     }
-    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation');
+    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation' && x !== 'gias-lockout-check');
     await ctx.oidc.session.save();
 
     ctx.oidc.claims = ctx.oidc.session.extraClaims;

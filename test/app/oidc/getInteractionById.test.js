@@ -20,6 +20,14 @@ describe('When getting interaction by id in api', () => {
         client_id: 'unittest',
         redirect_uri: 'https://unit.tests.local',
       },
+      interaction: {
+        error: 'login_required',
+        error_description: 'need to confirm lockout',
+        reason: 'gias_lockout_check_prompt',
+        type: 'gias-lockout-check',
+        uid: 'user-1',
+        oid: 'org-1',
+      },
     });
 
     req = {
@@ -43,6 +51,9 @@ describe('When getting interaction by id in api', () => {
     expect(res.json).toHaveBeenCalledWith({
       client_id: 'unittest',
       redirect_uri: 'https://unit.tests.local',
+      type: 'gias-lockout-check',
+      uid: 'user-1',
+      oid: 'org-1',
     });
   });
 

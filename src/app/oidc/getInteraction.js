@@ -17,6 +17,9 @@ const getInteraction = async (req, res) => {
     if (details.interaction.type === 'select-organisation') {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
     }
+    if (details.interaction.type === 'gias-lockout-check') {
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/gias-lockout`);
+    }
     if (details.interaction.error === 'consent_required') {
       return await oidc.interactionFinished(req, res, {
         login: {

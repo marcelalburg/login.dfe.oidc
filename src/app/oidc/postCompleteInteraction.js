@@ -7,7 +7,7 @@ const applicationsApi = require('./../../infrastructure/applications/api');
 
 
 const postCompleteInteraction = async (req, res) => {
-  const contents = JSON.stringify({uuid: req.params.grant, uid: req.body.uid});
+  const contents = JSON.stringify({ uuid: req.params.grant, uid: req.body.uid });
 
   if (config.requestVerification.isEnabled) {
     const requestVerification = new RequestVerification();
@@ -20,11 +20,19 @@ const postCompleteInteraction = async (req, res) => {
   }
 
   if (req.body.status === 'failed') {
-    interactions.render(res, 'loginerror', {reason: req.body.reason});
+    interactions.render(res, 'loginerror', { reason: req.body.reason });
     return;
   } else if (req.body.status === 'cancelled') {
     oidc.interactionFinished(req, res, {});
     return;
+  }
+
+  if (req.body.type === 'gias-lockout-check') {
+    const session = await oidc.Session.find(req.params.grant);
+    if (session.interaction.oid !== req.body.oid || session.interaction.uid !== req.body.uid) {
+      oidc.interactionFinished(req, res, {});
+      return;
+    }
   }
 
   logger.info(`completing interaction for ${req.body.type}`);
