@@ -136,7 +136,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       const sid = uuid();
       ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
     }
-    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation');
+    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation' && x !== 'gias-lockout-check');
     await ctx.oidc.session.save();
 
     ctx.oidc.claims = ctx.oidc.session.extraClaims;
