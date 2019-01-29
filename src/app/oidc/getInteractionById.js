@@ -8,16 +8,29 @@ const getSession = async (id) => {
   }
 };
 
+const getInteractionDetails = (session) => {
+  const details = {
+    client_id: session.params.client_id,
+    redirect_uri: session.params.redirect_uri,
+  };
+  Object.keys(session.interaction).forEach((key) => {
+    if (['error', 'error_description', 'reason'].find(x => x === key)) {
+      return;
+    }
+    details[key] = session.interaction[key];
+  });
+  return details;
+};
+
 const getInteractionById = async (req, res) => {
   const session = await getSession(req.params.grant);
   if (!session || !session.uuid) {
     return res.status(404).send();
   }
 
-  return res.json({
-    client_id: session.params.client_id,
-    redirect_uri: session.params.redirect_uri,
-  });
+  const details = getInteractionDetails(session);
+
+  return res.json(details);
 };
 
 module.exports = getInteractionById;

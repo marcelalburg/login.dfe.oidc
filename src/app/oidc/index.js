@@ -13,6 +13,7 @@ const getConfirmInteraction = require('./getConfirmInteraction');
 const getDevUsernamePassword = require('./getDevUsernamePassword');
 const getDevDigipass = require('./getDevDigipass');
 const getDevSelectOrg = require('./getDevSelectOrg');
+const getDevGiasLockout = require('./getDevGiasLockout');
 const postCompleteInteraction = require('./postCompleteInteraction');
 
 const noopMiddleware = (req, res, next) => {
@@ -31,16 +32,20 @@ const initialize = (app) => {
     app.keys = config.oidc.secureKey.split(',');
 
     const parse = bodyParser.urlencoded({ extended: false });
-    const auth = config.hostingEnvironment.env === "dev" ? noopMiddleware : apiAuth(app, config.api);
+    const auth = config.hostingEnvironment.env === 'dev' ? noopMiddleware : apiAuth(app, config.api);
 
     app.get('/interaction/:grant/check', auth, asyncWrapper(getInteractionById));
     app.get('/interaction/:grant', asyncWrapper(getInteraction));
     app.post('/interaction/:grant/confirm', parse, asyncWrapper(getConfirmInteraction));
     app.post('/interaction/:grant/complete', parse, asyncWrapper(postCompleteInteraction));
 
-    app.get('/:uuid/usernamepassword', asyncWrapper(getDevUsernamePassword));
-    app.get('/:uuid/digipass', asyncWrapper(getDevDigipass));
-    app.get('/:uuid/select-organisation', asyncWrapper(getDevSelectOrg));
+    if (config.hostingEnvironment.env === 'dev') {
+      app.get('/:uuid/usernamepassword', asyncWrapper(getDevUsernamePassword));
+      app.get('/:uuid/digipass', asyncWrapper(getDevDigipass));
+      app.get('/:uuid/select-organisation', asyncWrapper(getDevSelectOrg));
+      app.get('/:uuid/gias-lockout', asyncWrapper(getDevGiasLockout));
+    }
+
     app.use(oidc.callback);
     return provider;
   });
