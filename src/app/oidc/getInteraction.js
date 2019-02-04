@@ -9,16 +9,16 @@ const getInteraction = async (req, res) => {
     logger.info('see what else is available to you for interaction views', details);
 
     if (details.interaction.type === 'digipass') {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}`);
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}&redirect_uri=${details.params.redirect_uri}`);
     }
     if (details.interaction.type === 'sms') {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/sms?clientid=${details.params.client_id}&uid=${details.interaction.uid}`);
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/sms?clientid=${details.params.client_id}&uid=${details.interaction.uid}&redirect_uri=${details.params.redirect_uri}`);
     }
     if (details.interaction.type === 'select-organisation') {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}`);
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/select-organisation?uid=${details.interaction.uid}&redirect_uri=${details.params.redirect_uri}`);
     }
     if (details.interaction.type === 'gias-lockout-check') {
-      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/gias-lockout`);
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/gias-lockout?redirect_uri=${details.params.redirect_uri}`);
     }
     if (details.interaction.error === 'consent_required') {
       return await oidc.interactionFinished(req, res, {
