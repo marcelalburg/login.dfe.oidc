@@ -14,6 +14,7 @@ const getDevUsernamePassword = require('./getDevUsernamePassword');
 const getDevDigipass = require('./getDevDigipass');
 const getDevSelectOrg = require('./getDevSelectOrg');
 const getDevGiasLockout = require('./getDevGiasLockout');
+const getDevConsent = require('./getDevConsent');
 const postCompleteInteraction = require('./postCompleteInteraction');
 
 const noopMiddleware = (req, res, next) => {
@@ -44,6 +45,7 @@ const initialize = (app) => {
       app.get('/:uuid/digipass', asyncWrapper(getDevDigipass));
       app.get('/:uuid/select-organisation', asyncWrapper(getDevSelectOrg));
       app.get('/:uuid/gias-lockout', asyncWrapper(getDevGiasLockout));
+      app.get('/:uuid/consent', asyncWrapper(getDevConsent));
     }
 
     app.use(oidc.callback);

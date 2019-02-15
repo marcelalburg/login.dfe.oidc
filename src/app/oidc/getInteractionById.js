@@ -19,6 +19,10 @@ const getInteractionDetails = (session) => {
     }
     details[key] = session.interaction[key];
   });
+  if (session.interaction.error === 'consent_required') {
+    details.scopes = session.params.scope.split(/\s/gi);
+    details.uid = session.accountId;
+  }
   return details;
 };
 

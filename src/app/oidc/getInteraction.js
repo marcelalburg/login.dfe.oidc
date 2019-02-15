@@ -6,7 +6,7 @@ const applicationsApi = require('./../../infrastructure/applications/api');
 const getInteraction = async (req, res) => {
   try {
     const details = await oidc.interactionDetails(req);
-    logger.info('see what else is available to you for interaction views', details);
+    logger.debug('see what else is available to you for interaction views', details);
 
     if (details.interaction.type === 'digipass') {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/digipass?uid=${details.interaction.uid}&redirect_uri=${details.params.redirect_uri}`);
@@ -21,12 +21,19 @@ const getInteraction = async (req, res) => {
       return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/gias-lockout?redirect_uri=${details.params.redirect_uri}`);
     }
     if (details.interaction.error === 'consent_required') {
-      return await oidc.interactionFinished(req, res, {
-        login: {
-          account: details.accountId,
-        },
-        consent: {},
-      });
+      const client = await applicationsApi.getOidcModelById(details.params.client_id, req);
+      if (!client.params.explicitConsent) {
+        return await oidc.interactionFinished(req, res, {
+          login: {
+            account: details.accountId,
+          },
+          consent: {},
+          meta: {
+            interactionCompleted: 'consent',
+          },
+        });
+      }
+      return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/consent?redirect_uri=${details.params.redirect_uri}`);
     }
 
     return res.redirect(`${config.oidc.interactionBaseUrl}/${details.uuid}/usernamepassword?clientid=${details.params.client_id}&redirect_uri=${details.params.redirect_uri}`);
