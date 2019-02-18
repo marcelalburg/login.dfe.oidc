@@ -41,6 +41,9 @@ const postCompleteInteraction = async (req, res) => {
   if (req.body.type === 'select-organisation') {
     meta.organisation = JSON.parse(decodeURIComponent(req.body.organisation));
   }
+  if (req.body.type === 'consent') {
+    meta.organisationIds = req.body.organisations;
+  }
 
   try {
     await oidc.interactionFinished(req, res, {

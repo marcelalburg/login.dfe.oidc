@@ -56,7 +56,8 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     openid: ['sub'],
     email: ['email'],
     profile: ['given_name', 'family_name'],
-    organisation: { organisation: null },
+    // organisation: { organisation: null },
+    organisation: ['organisation', 'organisationIds'],
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -78,6 +79,9 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
 
       if (ctx.oidc.result.meta.interactionCompleted === 'select-organisation') {
         ctx.oidc.session.extraClaims.organisation = ctx.oidc.result.meta.organisation;
+      }
+      if (ctx.oidc.result.meta.interactionCompleted === 'consent') {
+        ctx.oidc.session.extraClaims.organisationIds = ctx.oidc.result.meta.organisationIds;
       }
 
       await ctx.oidc.session.save();
