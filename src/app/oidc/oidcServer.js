@@ -24,6 +24,8 @@ if (!isNaN(shortCookieTimeOutInMinutes)) {
 }
 const longCookieExpiry = (60000 * longCookieExpiryInMinutes);
 
+const interactionsToRunEveryTime = ['select-organisation', 'gias-lockout-check', 'consent'];
+
 const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.hostingEnvironment.host}:${config.hostingEnvironment.port}`, {
   clientCacheDuration: 300,
   logoutSource: logoutAction,
@@ -54,7 +56,8 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     openid: ['sub'],
     email: ['email'],
     profile: ['given_name', 'family_name'],
-    organisation: { organisation: null },
+    // organisation: { organisation: null },
+    organisation: ['organisation', 'organisationIds'],
   },
   interactionUrl(ctx) {
     return `/interaction/${ctx.oidc.uuid}`;
@@ -62,7 +65,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
   async interactionCheck(ctx) {
     const client = await applicationsApi.getOidcModelById(ctx.oidc.client.clientId);
 
-    logger.info('checking interaction');
+    logger.debug('checking interaction');
     if (!ctx.oidc.session.interactionsCompleted) {
       ctx.oidc.session.interactionsCompleted = [];
     }
@@ -71,18 +74,21 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     }
 
     if (ctx.oidc.result && ctx.oidc.result.meta && ctx.oidc.result.meta.interactionCompleted) {
-      logger.info(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
+      logger.debug(`adding ${ctx.oidc.result.meta.interactionCompleted} to completed interactions`);
       ctx.oidc.session.interactionsCompleted.push(ctx.oidc.result.meta.interactionCompleted);
 
       if (ctx.oidc.result.meta.interactionCompleted === 'select-organisation') {
         ctx.oidc.session.extraClaims.organisation = ctx.oidc.result.meta.organisation;
+      }
+      if (ctx.oidc.result.meta.interactionCompleted === 'consent') {
+        ctx.oidc.session.extraClaims.organisationIds = ctx.oidc.result.meta.organisationIds;
       }
 
       await ctx.oidc.session.save();
     }
 
     if (client.params.digipassRequired && !ctx.oidc.session.interactionsCompleted.find(x => x === 'digipass')) {
-      logger.info('No digipass completed. Time to do it.');
+      logger.debug('No digipass completed. Time to do it.');
       ctx.oidc.result = undefined;
       ctx.oidc.ctx._matchedRouteName = 'authorization';
       return {
@@ -94,7 +100,7 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
     }
 
     if (client.params.smsRequired && !ctx.oidc.session.interactionsCompleted.find(x => x === 'sms')) {
-      logger.info('No sms completed. Time to do it.');
+      logger.debug('No sms completed. Time to do it.');
       ctx.oidc.result = undefined;
       ctx.oidc.ctx._matchedRouteName = 'authorization';
       return {
@@ -105,38 +111,54 @@ const oidc = new Provider(`${config.hostingEnvironment.protocol}://${config.host
       };
     }
 
-    if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
-      logger.info('will need to pick which Org this person belongs too. Time to do it..');
+    if (ctx.oidc.params.prompt === 'consent' && client.params.explicitConsent && !ctx.oidc.session.interactionsCompleted.find(x => x === 'consent')) {
+      logger.debug('No consent. Lets ask the user');
       ctx.oidc.result = undefined;
       ctx.oidc.ctx._matchedRouteName = 'authorization';
       return {
-        error: 'login_required',
-        reason: 'select-organisation',
-        type: 'select-organisation',
-        uid: ctx.oidc.account.user.sub,
+        error: 'consent_required',
+        error_description: 'prompt consent was not resolved',
+        reason: 'consent_prompt',
       };
     }
 
-    if (client.params.requiresGiasLockoutCheck && !ctx.oidc.session.interactionsCompleted.find(x => x === 'gias-lockout-check')) {
-      logger.info('No GIAS lockout check completed. Time to do it.');
-      ctx.oidc.result = undefined;
-      ctx.oidc.ctx._matchedRouteName = 'authorization';
-      return {
-        error: 'login_required',
-        reason: 'gias_lockout_check_prompt',
-        type: 'gias-lockout-check',
-        uid: ctx.oidc.account.user.sub,
-        oid: ctx.oidc.session.extraClaims.organisation.id,
-      };
+    if (!ctx.oidc.session.interactionsCompleted.find(x => x === 'consent')) {
+      if (ctx.oidc.params.scope.includes('organisation') && !ctx.oidc.session.interactionsCompleted.find(x => x === 'select-organisation')) {
+        logger.info('will need to pick which Org this person belongs too. Time to do it..');
+        ctx.oidc.result = undefined;
+        ctx.oidc.ctx._matchedRouteName = 'authorization';
+        return {
+          error: 'login_required',
+          reason: 'select-organisation',
+          type: 'select-organisation',
+          uid: ctx.oidc.account.user.sub,
+        };
+      }
+
+      if (client.params.requiresGiasLockoutCheck && !ctx.oidc.session.interactionsCompleted.find(x => x === 'gias-lockout-check')) {
+        logger.info('No GIAS lockout check completed. Time to do it.');
+        ctx.oidc.result = undefined;
+        ctx.oidc.ctx._matchedRouteName = 'authorization';
+        return {
+          error: 'login_required',
+          reason: 'gias_lockout_check_prompt',
+          type: 'gias-lockout-check',
+          uid: ctx.oidc.account.user.sub,
+          oid: ctx.oidc.session.extraClaims.organisation.id,
+        };
+      }
+    } else {
+      logger.debug('Skipping organisation interactions as consent flow has been done');
     }
 
-    logger.info('completed all interactions');
+    logger.debug('completed all interactions');
     if (!ctx.oidc.session.sidFor(ctx.oidc.client.clientId)) {
-      logger.info(`adding ${ctx.oidc.client.clientId} to authorized clients`);
+      logger.debug(`adding ${ctx.oidc.client.clientId} to authorized clients`);
       const sid = uuid();
       ctx.oidc.session.sidFor(ctx.oidc.client.clientId, sid);
     }
-    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation' && x !== 'gias-lockout-check');
+    ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => !interactionsToRunEveryTime.find(y => y === x));
+    // ctx.oidc.session.interactionsCompleted = ctx.oidc.session.interactionsCompleted.filter(x => x !== 'select-organisation' && x !== 'gias-lockout-check');
     await ctx.oidc.session.save();
 
     ctx.oidc.claims = ctx.oidc.session.extraClaims;

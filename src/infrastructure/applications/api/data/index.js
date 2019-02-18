@@ -1,4 +1,6 @@
-const { omitBy,isNull, isUndefined } = require('lodash');
+const { omitBy, isNull, isUndefined } = require('lodash');
+
+const booleanParams = ['digipassRequired', 'supportsUsernameLogin', 'requiresGiasLockoutCheck', 'explicitConsent'];
 
 const mapEntity = async (entity) => {
   if (!entity) {
@@ -9,7 +11,7 @@ const mapEntity = async (entity) => {
   if (entity.relyingParty.params) {
     Object.keys(entity.relyingParty.params).forEach((key) => {
       let value = entity.relyingParty.params[key];
-      if (key === 'digipassRequired' || key === 'supportsUsernameLogin' || key === 'requiresGiasLockoutCheck') {
+      if (booleanParams.find(x => x === key)) {
         value = value === '1' || value.toLowerCase() === 'true';
       }
       params[key] = value;
