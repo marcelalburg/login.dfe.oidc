@@ -42,7 +42,7 @@ const postCompleteInteraction = async (req, res) => {
     meta.organisation = JSON.parse(decodeURIComponent(req.body.organisation));
   }
   if (req.body.type === 'consent') {
-    meta.organisationIds = req.body.organisations;
+    meta.organisations = JSON.parse(decodeURIComponent(req.body.organisations));
   }
 
   try {
